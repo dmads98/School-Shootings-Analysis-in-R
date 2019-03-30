@@ -23,16 +23,16 @@ For our analysis, we plan to use variables that seem likely to have an influence
 
 Now we perform some preliminary exploratory data analysis by showing summary statistics and visualizations:
 
-```{r load-packages}
+```{r load-packages,  message=FALSE}
 library(tidyverse)
 ```
 
-```{r load-data}
+```{r load-data, message=FALSE}
 school_shootings <- read_csv("../project/school-shootings-data.csv")
 ```
 
 We start by observing the distribution of casualties (our response variable):
-```{r summ-stats}
+```{r summ-stats, echo=FALSE}
 school_shootings %>%
   filter(!is.na(casualties)) %>%
   ggplot(mapping = aes(x = casualties)) +
@@ -43,7 +43,7 @@ school_shootings %>%
 ```
 This will be useful as we would want to see what the median/mean number of casualties is as well as the general shape of our distribution. It looks like it is skewed to the right, which means we would look at the median:
 
-```{r median-casualties}
+```{r median-casualties, echo=FALSE}
 school_shootings %>%
   summarise(median = median(casualties))
 ```
@@ -51,7 +51,7 @@ The median of number of casualties is 1.
 
 Next, we see the distribution of school staffing:
 
-```{r staff-viz}
+```{r staff-viz, echo=FALSE}
 school_shootings %>%
   filter(!is.na(staffing)) %>%
   ggplot(mapping = aes(x = staffing)) +
@@ -62,7 +62,7 @@ school_shootings %>%
 ```
 Because this distribution is slightly skewed, we stick to the median. 
 
-```{r mean-staff-num}
+```{r mean-staff-num, echo=FALSE}
 school_shootings %>%
   filter(!is.na(staffing)) %>%
   summarise(median_staff_num = median(staffing))
@@ -71,7 +71,7 @@ The median number of staff at schools is 54.53. This variable is useful because 
 
 
 We can also rank states by the number of school shootings that have occurred there:
-```{r state-rank}
+```{r state-rank, echo=FALSE}
 school_shootings %>%
   filter(!is.na(state)) %>%
   group_by(state) %>%
@@ -82,7 +82,7 @@ This variable is useful to observe the effect of states' gun control laws on the
 
 One more thing that would be interesting to see is the distribution of the amount of students who qualify for free or reduced lunch.
 
-```{r lunch-viz}
+```{r lunch-viz, echo=FALSE}
 school_shootings %>%
   filter(!is.na(lunch)) %>%
   ggplot(mapping = aes(x = lunch)) +
@@ -93,4 +93,4 @@ However, this might be misleading given that this is a raw number, whereas a pro
 
 ## Section 3. Data
 
-Our data was not put in the ```/data``` folder since it started giving us issues (the R chunk would not find the data). Our codebook and dimensions were put in the README file.
+Our data was not put in the ```/data``` folder since it started giving us issues (the R chunk would not find the data because there is a project folder under the larger project folder). Our codebook and dimensions were put in the README file.
