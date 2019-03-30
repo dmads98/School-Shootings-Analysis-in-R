@@ -69,78 +69,13 @@ use comparison groups that relate to income, race or type of high
 school. However, this is not finalized.
 
 Now we perform some preliminary exploratory data analysis by showing
-summary statistics and
-    visualizations:
-
-``` r
-library(tidyverse)
-```
-
-    ## ── Attaching packages ────────────────────────────────────────── tidyverse 1.2.1 ──
-
-    ## ✔ ggplot2 3.1.0     ✔ purrr   0.2.5
-    ## ✔ tibble  2.0.0     ✔ dplyr   0.7.8
-    ## ✔ tidyr   0.8.2     ✔ stringr 1.3.1
-    ## ✔ readr   1.3.1     ✔ forcats 0.3.0
-
-    ## ── Conflicts ───────────────────────────────────────────── tidyverse_conflicts() ──
-    ## ✖ dplyr::filter() masks stats::filter()
-    ## ✖ dplyr::lag()    masks stats::lag()
-
-``` r
-school_shootings <- read_csv("../project/school-shootings-data.csv")
-```
-
-    ## Parsed with column specification:
-    ## cols(
-    ##   .default = col_character(),
-    ##   uid = col_double(),
-    ##   year = col_double(),
-    ##   time = col_time(format = ""),
-    ##   enrollment = col_number(),
-    ##   killed = col_double(),
-    ##   injured = col_double(),
-    ##   casualties = col_double(),
-    ##   age_shooter1 = col_double(),
-    ##   shooter_deceased1 = col_double(),
-    ##   age_shooter2 = col_double(),
-    ##   shooter_deceased2 = col_double(),
-    ##   white = col_number(),
-    ##   black = col_double(),
-    ##   hispanic = col_double(),
-    ##   asian = col_double(),
-    ##   american_indian_alaska_native = col_double(),
-    ##   hawaiian_native_pacific_islander = col_double(),
-    ##   two_or_more = col_double(),
-    ##   resource_officer = col_double(),
-    ##   lat = col_double()
-    ##   # ... with 4 more columns
-    ## )
-
-    ## See spec(...) for full column specifications.
+summary statistics and visualizations:
 
 We start by observing the distribution of casualties (our response
-variable):
-
-``` r
-school_shootings %>%
-  filter(!is.na(casualties)) %>%
-  ggplot(mapping = aes(x = casualties)) +
-  geom_histogram(binwidth = 1) +
-  labs(title = "Distribution of casualties") +
-  xlab("Casualties") +
-  ylab("Frequency")
-```
-
-![](proposal_files/figure-gfm/summ-stats-1.png)<!-- --> This will be
-useful as we would want to see what the median/mean number of casualties
-is as well as the general shape of our distribution. It looks like it is
-skewed to the right, which means we would look at the median:
-
-``` r
-school_shootings %>%
-  summarise(median = median(casualties))
-```
+variable): ![](proposal_files/figure-gfm/summ-stats-1.png)<!-- --> This
+will be useful as we would want to see what the median/mean number of
+casualties is as well as the general shape of our distribution. It looks
+like it is skewed to the right, which means we would look at the median:
 
     ## # A tibble: 1 x 1
     ##   median
@@ -151,24 +86,8 @@ The median of number of casualties is 1.
 
 Next, we see the distribution of school staffing:
 
-``` r
-school_shootings %>%
-  filter(!is.na(staffing)) %>%
-  ggplot(mapping = aes(x = staffing)) +
-  geom_histogram(binwidth = 5) +
-  labs(title = "Distribution of number of full-time teachers", subtitle = "At each shooting") +
-  xlab("Amount of teachers") +
-  ylab("Frequency")
-```
-
 ![](proposal_files/figure-gfm/staff-viz-1.png)<!-- --> Because this
 distribution is slightly skewed, we stick to the median.
-
-``` r
-school_shootings %>%
-  filter(!is.na(staffing)) %>%
-  summarise(median_staff_num = median(staffing))
-```
 
     ## # A tibble: 1 x 1
     ##   median_staff_num
@@ -183,14 +102,6 @@ casualties.
 
 We can also rank states by the number of school shootings that have
 occurred there:
-
-``` r
-school_shootings %>%
-  filter(!is.na(state)) %>%
-  group_by(state) %>%
-  count() %>%
-  arrange(desc(n))
-```
 
     ## # A tibble: 41 x 2
     ## # Groups:   state [41]
@@ -212,14 +123,8 @@ This variable is useful to observe the effect of states’ gun control
 laws on the number of casualties or shootings happening.
 
 One more thing that would be interesting to see is the distribution of
-the amount of students who qualify for free or reduced lunch.
-
-``` r
-school_shootings %>%
-  filter(!is.na(lunch)) %>%
-  ggplot(mapping = aes(x = lunch)) +
-  geom_histogram()
-```
+the amount of students who qualify for free or reduced
+    lunch.
 
     ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 
@@ -230,5 +135,6 @@ proportion would be more useful.
 ## Section 3. Data
 
 Our data was not put in the `/data` folder since it started giving us
-issues (the R chunk would not find the data). Our codebook and
-dimensions were put in the README file.
+issues (the R chunk would not find the data because there is a project
+folder under the larger project folder). Our codebook and dimensions
+were put in the README file.
