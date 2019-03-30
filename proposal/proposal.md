@@ -64,9 +64,12 @@ For our analysis, we plan to use variables that seem likely to have an
 influence on the number of casualties. Our response (dependent) variable
 will be the number of casualties while the explanatory (independent)
 variables will range from 1 to 50, according to the variables we decide
-to include and that have an effect on the number of casualties. We might
-use comparison groups that relate to income, race or type of high
-school. However, this is not finalized.
+to include and that have an effect on the number of casualties, such as
+`shooting_type`, `age_shooter1`, and racial demographics of the school,
+as determined by the variables `white`, `black`, `hispanic`, `asian`,
+`american_indian_alaska_native`, `hawaiian_native_pacific_islander`, and
+`two_or_more`. We might use comparison groups that relate to income,
+race or type of high school. However, this is not finalized.
 
 Now we perform some preliminary exploratory data analysis by showing
 summary statistics and visualizations:
@@ -130,9 +133,10 @@ the amount of students who qualify for free or reduced
 
     ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 
-![](proposal_files/figure-gfm/lunch-viz-1.png)<!-- --> However, this
-might be misleading given that this is a raw number, whereas a
-proportion would be more useful.
+![](proposal_files/figure-gfm/lunch-viz-1.png)<!-- -->
+
+However, this might be misleading given that this is a raw number,
+whereas a proportion would be more useful.
 
 ## Section 3. Data
 
