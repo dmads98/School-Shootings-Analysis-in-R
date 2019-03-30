@@ -57,23 +57,34 @@ weapon, weapon\_source, lat, long, staffing, low\_grade, high\_grade,
 lunch, county, state\_fips, county\_fips, ulocale
 
 More information on the description of these variables can be found
-under the codebook in the README
-    file.
+under the codebook in the README file.
 
 ## Section 2. Data analysis plan
+
+For our analysis, we plan to use variables that seem likely to have an
+influence on the number of casualties. Our response (dependent) variable
+will be the number of casualties while the explanatory (independent)
+variables will range from 1 to 50, according to the variables we decide
+to include and that have an effect on the number of casualties. We might
+use comparison groups that relate to income, race or type of high
+school. However, this is not finalized.
+
+Now we perform some preliminary exploratory data analysis by showing
+summary statistics and
+    visualizations:
 
 ``` r
 library(tidyverse)
 ```
 
-    ## ── Attaching packages ─────────────────────────────────────────────── tidyverse 1.2.1 ──
+    ## ── Attaching packages ────────────────────────────────────────── tidyverse 1.2.1 ──
 
     ## ✔ ggplot2 3.1.0     ✔ purrr   0.2.5
     ## ✔ tibble  2.0.0     ✔ dplyr   0.7.8
     ## ✔ tidyr   0.8.2     ✔ stringr 1.3.1
     ## ✔ readr   1.3.1     ✔ forcats 0.3.0
 
-    ## ── Conflicts ────────────────────────────────────────────────── tidyverse_conflicts() ──
+    ## ── Conflicts ───────────────────────────────────────────── tidyverse_conflicts() ──
     ## ✖ dplyr::filter() masks stats::filter()
     ## ✖ dplyr::lag()    masks stats::lag()
 
@@ -109,6 +120,9 @@ school_shootings <- read_csv("../project/school-shootings-data.csv")
 
     ## See spec(...) for full column specifications.
 
+We start by observing the distribution of casualties (our response
+variable):
+
 ``` r
 school_shootings %>%
   filter(!is.na(casualties)) %>%
@@ -119,7 +133,24 @@ school_shootings %>%
   ylab("Frequency")
 ```
 
-![](proposal_files/figure-gfm/summ-stats-1.png)<!-- -->
+![](proposal_files/figure-gfm/summ-stats-1.png)<!-- --> This will be
+useful as we would want to see what the median/mean number of casualties
+is as well as the general shape of our distribution. It looks like it is
+skewed to the right, which means we would look at the median:
+
+``` r
+school_shootings %>%
+  summarise(median = median(casualties))
+```
+
+    ## # A tibble: 1 x 1
+    ##   median
+    ##    <dbl>
+    ## 1      1
+
+The median of number of casualties is 1.
+
+Next, we see the distribution of school staffing:
 
 ``` r
 school_shootings %>%
@@ -131,7 +162,8 @@ school_shootings %>%
   ylab("Frequency")
 ```
 
-![](proposal_files/figure-gfm/staff-viz-1.png)<!-- -->
+![](proposal_files/figure-gfm/staff-viz-1.png)<!-- --> Because this
+distribution is slightly skewed, we stick to the median.
 
 ``` r
 school_shootings %>%
@@ -143,6 +175,12 @@ school_shootings %>%
     ##   median_staff_num
     ##              <dbl>
     ## 1             54.5
+
+The median number of staff at schools is 54.53. This variable is useful
+because much of media coverage around school shooters mentions mental
+health and social support. It would be interesting to see if a higher
+number of staffing is correlated to lower or higher number of
+casualties.
 
 We can also rank states by the number of school shootings that have
 occurred there:
@@ -171,6 +209,9 @@ school_shootings %>%
     ## 10 Michigan           8
     ## # … with 31 more rows
 
+This variable is useful to observe the effect of states’ gun control
+laws on the number of casualties or shootings happening.
+
 One more thing that would be interesting to see is the distribution of
 the amount of students who qualify for free or reduced lunch.
 
@@ -183,9 +224,12 @@ school_shootings %>%
 
     ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 
-![](proposal_files/figure-gfm/lunch-viz-1.png)<!-- -->
-
-However, this might be misleading given that this is a raw number,
-whereas a proportion would be more useful.
+![](proposal_files/figure-gfm/lunch-viz-1.png)<!-- --> However, this
+might be misleading given that this is a raw number, whereas a
+proportion would be more useful.
 
 ## Section 3. Data
+
+Our data was not put in the `/data` folder since it started giving us
+issues (the R chunk would not find the data). Our codebook and
+dimensions were put in the README file.
