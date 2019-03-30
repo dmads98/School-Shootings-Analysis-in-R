@@ -23,16 +23,18 @@ For our analysis, we plan to use variables that seem likely to have an influence
 
 Now we perform some preliminary exploratory data analysis by showing summary statistics and visualizations:
 
-```{r load-packages,  message=FALSE}
+
+```{r load-packages, echo = FALSE, message = FALSE}
 library(tidyverse)
 ```
 
-```{r load-data, message=FALSE}
+```{r load-data, echo = FALSE, message = FALSE}
 school_shootings <- read_csv("../project/school-shootings-data.csv")
 ```
 
 We start by observing the distribution of casualties (our response variable):
-```{r summ-stats, echo=FALSE}
+
+```{r summ-stats, echo = FALSE}
 school_shootings %>%
   filter(!is.na(casualties)) %>%
   ggplot(mapping = aes(x = casualties)) +
@@ -62,15 +64,15 @@ school_shootings %>%
 ```
 Because this distribution is slightly skewed, we stick to the median. 
 
-```{r mean-staff-num, echo=FALSE}
+```{r mean-staff-num, echo = FALSE}
 school_shootings %>%
   filter(!is.na(staffing)) %>%
   summarise(median_staff_num = median(staffing))
 ```
 The median number of staff at schools is 54.53. This variable is useful because much of media coverage around school shooters mentions mental health and social support. It would be interesting to see if a higher number of staffing is correlated to lower or higher number of casualties.
 
-
 We can also rank states by the number of school shootings that have occurred there:
+
 ```{r state-rank, echo=FALSE}
 school_shootings %>%
   filter(!is.na(state)) %>%

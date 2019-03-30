@@ -71,19 +71,13 @@ school. However, this is not finalized.
 Now we perform some preliminary exploratory data analysis by showing
 summary statistics and visualizations:
 
-``` r
-library(tidyverse)
-```
-
-``` r
-school_shootings <- read_csv("../project/school-shootings-data.csv")
-```
-
 We start by observing the distribution of casualties (our response
-variable): ![](proposal_files/figure-gfm/summ-stats-1.png)<!-- --> This
-will be useful as we would want to see what the median/mean number of
-casualties is as well as the general shape of our distribution. It looks
-like it is skewed to the right, which means we would look at the median:
+variable):
+
+![](proposal_files/figure-gfm/summ-stats-1.png)<!-- --> This will be
+useful as we would want to see what the median/mean number of casualties
+is as well as the general shape of our distribution. It looks like it is
+skewed to the right, which means we would look at the median:
 
     ## # A tibble: 1 x 1
     ##   median
