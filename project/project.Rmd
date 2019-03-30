@@ -11,14 +11,62 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ```{r load-packages}
 library(tidyverse)
+
 ```
 
 ```{r load-data}
-school_shootings <- read_csv("/data/school-shootings-data.csv")
+school_shootings <- read_csv("school-shootings-data.csv")
+```
+
+```{r summ-stats}
+
+school_shootings %>%
+  filter(!is.na(casualties)) %>%
+  ggplot(mapping = aes(x = casualties)) +
+  geom_histogram(binwidth = 1) +
+  labs(title = "Distribution of casualties") +
+  xlab("Casualties") +
+  ylab("Frequency")
+
 ```
 
 
+```{r}
+school_shootings %>%
+  filter(!is.na(staffing)) %>%
+  ggplot(mapping = aes(x = staffing)) +
+  geom_histogram(binwidth = 5) +
+  labs(title = "Distribution of number of full-time teachers", subtitle = "At each shooting") +
+  xlab("Amount of teachers") +
+  ylab("Frequency")
+```
 
+```{r mean-staff-num}
+school_shootings %>%
+  filter(!is.na(staffing)) %>%
+  summarise(median_staff_num = median(staffing))
+```
+
+We can also rank states by the number of school shootings that have occurred there:
+
+```{r state-rank}
+school_shootings %>%
+  filter(!is.na(state)) %>%
+  group_by(state) %>%
+  count() %>%
+  arrange(desc(n))
+```
+
+One more thing that would be interesting to see is the distribution of the amount of students who qualify for free or reduced lunch.
+
+```{r}
+school_shootings %>%
+  filter(!is.na(lunch)) %>%
+  ggplot(mapping = aes(x = lunch)) +
+  geom_histogram()
+```
+
+However, this might be misleading given that this is a raw number, whereas a proportion would be more useful.
 
 Your project goes here! Before you submit, make sure your chunks are turned off with `echo = FALSE`. 
 
