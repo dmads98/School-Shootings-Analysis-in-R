@@ -29,7 +29,7 @@ library(tidyverse)
 ```
 
 ```{r load-data, echo = FALSE, message = FALSE}
-school_shootings <- read_csv("../project/school-shootings-data.csv")
+school_shootings <- read_csv("../data/school-shootings-data.csv")
 ```
 
 We start by observing the distribution of casualties (our response variable):

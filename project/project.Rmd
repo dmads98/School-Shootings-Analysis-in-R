@@ -9,11 +9,11 @@ output: github_document
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-```{r load-packages}
+```{r load-packages, message=FALSE}
 library(tidyverse)
 
 ```
 
-```{r load-data}
-school_shootings <- read_csv("school-shootings-data.csv")
+```{r load-data, message=FALSE}
+school_shootings <- read_csv("../data/school-shootings-data.csv")
 ```
