@@ -104,3 +104,10 @@ Variables:
 ```lunch_percent```
 ```shooting_type```
 
+```{r}
+mod_cas <- lm(casualties ~ day_of_week + black_percent + white_percent, data = school_shootings)
+
+mod_cas
+```
+
+

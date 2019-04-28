@@ -20,11 +20,11 @@ Distribution of Casualties
     ## # Groups:   shooting_type [10]
     ##    shooting_type                   n
     ##    <chr>                       <int>
-    ##  1 targeted                      131
-    ##  2 indiscriminate                 44
-    ##  3 accidental                     26
-    ##  4 targeted and indiscriminate     5
-    ##  5 unclear                         5
+    ##  1 targeted                      140
+    ##  2 indiscriminate                 45
+    ##  3 accidental                     28
+    ##  4 unclear                         9
+    ##  5 targeted and indiscriminate     6
     ##  6 public suicide                  4
     ##  7 accidental or targeted          2
     ##  8 hostage suicide                 2
@@ -39,11 +39,11 @@ Most of the shootings in our dataset were categorized as targeted.
     ## # Groups:   day_of_week [5]
     ##   day_of_week     n
     ##   <chr>       <int>
-    ## 1 Tuesday        52
-    ## 2 Wednesday      51
-    ## 3 Monday         45
-    ## 4 Friday         40
-    ## 5 Thursday       33
+    ## 1 Tuesday        55
+    ## 2 Wednesday      53
+    ## 3 Monday         48
+    ## 4 Friday         45
+    ## 5 Thursday       37
 
 There seems to be minimal difference in the number of shootings among
 days of the week, but Tuesday and Wednesday are the days with the most
@@ -64,4 +64,34 @@ perform predictions.
 Variables:
 
 `day_of_week` `black_percent` `white_percent` `hispanic_percent`
-`asian_percent` `enrollment` `lunch_percent` `shooting_type`
+`asian_percent` `enrollment` `lunch_percent`
+
+``` shooting_type```
+
+```
+
+## 
+
+## Call:
+
+## lm(formula = casualties ~ day\_of\_week + black\_percent + white\_percent,
+
+## data = school\_shootings)
+
+## 
+
+## Coefficients:
+
+## (Intercept) day\_of\_weekMonday day\_of\_weekThursday
+
+## 1.5614 -0.1165 -0.7555
+
+## day\_of\_weekTuesday day\_of\_weekWednesday black\_percent
+
+## 0.4715 -0.2698 -0.8502
+
+## white\_percent
+
+## 1.7832
+
+\`\`\`
