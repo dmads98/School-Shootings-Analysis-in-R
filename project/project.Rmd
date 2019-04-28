@@ -17,3 +17,90 @@ library(tidyverse)
 ```{r load-data, message=FALSE}
 school_shootings <- read_csv("../data/school-shootings-data.csv")
 ```
+
+### Frequency of Annual School Shootings
+
+```{r quan-shootings, fig.width=5}
+school_shootings %>%
+  group_by(year) %>%
+  count() %>%
+  ggplot(mapping = aes(x = year, y = n)) +
+  geom_line() +
+  labs(title = "Number of annual school shootings", subtitle = "1999 - 2018") +
+  ylab("Frequency") +
+  xlab("Year")
+
+```
+
+### Number of Casualties Across the Years
+
+```{r freq-casualties, fig.width=6}
+school_shootings %>%
+  ggplot(mapping = aes(x = year, y = casualties)) +
+  geom_point() +
+  labs(title = "Casualties over the years 1999 - 2018") +
+  ylab("Casualties") +
+  xlab("Year")
+```
+### Distribution of Casualties
+
+```{r dist-casualties, fig.width=5}
+school_shootings %>%
+  ggplot(mapping = aes(x = casualties)) +
+  geom_bar() +
+  labs(title = "Distribution of Casualties", subtitle = "School Shootings from 1999-2018") +
+  xlab("Casualties") +
+  ylab("Frequency")
+```
+
+### Popular Types of Shootings
+
+```{r}
+school_shootings %>%
+  group_by(shooting_type) %>%
+  count() %>%
+  arrange(desc(n))
+```
+Most of the shootings in our dataset were categorized as targeted.
+
+### Popular Days
+```{r}
+school_shootings %>%
+  group_by(day_of_week) %>%
+  count() %>%
+  arrange(desc(n))
+```
+There seems to be minimal difference in the number of shootings among days of the week, but Tuesday and Wednesday are the days with the most school shootings taking place. 
+
+### Mutation of Variables
+
+We wanted to manipulate some of our variables in order to make them more useful. For example, many of our variables are raw and thus, converting them to percentages will be more useful and standardized. 
+
+```{r mutation-races}
+school_shootings <- school_shootings %>%
+  mutate(white_percent = white/enrollment,
+         black_percent = black/enrollment,
+         hispanic_percent = hispanic/enrollment,
+         asian_percent = asian/enrollment)
+```
+
+```{r lunch-percent}
+school_shootings <- school_shootings %>%
+  mutate(lunch_percent = lunch/enrollment)
+```
+
+### Multivariate Regression Analysis
+
+These are the variables that we will include in our model. We will then use model selection in order to find the most appropriate model to perform predictions. 
+
+Variables:
+
+```day_of_week```
+```black_percent```
+```white_percent```
+```hispanic_percent```
+```asian_percent```
+```enrollment```
+```lunch_percent```
+```shooting_type```
+
