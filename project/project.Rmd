@@ -11,6 +11,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ```{r load-packages, message=FALSE}
 library(tidyverse)
+library(broom)
 
 ```
 
@@ -89,6 +90,15 @@ school_shootings <- school_shootings %>%
   mutate(lunch_percent = lunch/enrollment)
 ```
 
+```{r time-mut}
+school_shootings %>% 
+  mutate(time_of_day = case_when(
+    time >= 6:00:00 & time < 12:00:00 ~ "morning",
+    time >= 12:00:00 & time >= 18:00:00 ~ "afternoon",
+    time > 18:00:00 ~ "night"
+  ))
+```
+
 ### Multivariate Regression Analysis
 
 These are the variables that we will include in our model. We will then use model selection in order to find the most appropriate model to perform predictions. 
@@ -132,11 +142,36 @@ school_shootings <- school_shootings %>%
 
 ### Full Model
 
-Going to start by creating a model with all variables and then narrowing it down to only 10 variables. 
-```{r}
-mod_cas <- lm(casualties ~ day_of_week + black_percent + white_percent, data = school_shootings)
+Going to start by creating a model with all variables and then performing model selection to find the perfect model. 
 
-mod_cas
+```{r}
+mod_cas <- lm(casualties ~ 
+              enrollment +
+              factor(shooting_type) +
+              staffing + 
+              white_percent + 
+              black_percent +
+              hispanic_percent +
+              asian_percent +
+              lunch_percent +
+              factor(resource_officer) +
+              factor(day_of_week),
+              data = school_shootings)
+
+#mod_cas %>%
+#  tidy() %>%
+#  select(term, estimate)
+
+#glance(mod_cas)$adj.r.squared
+
+perf_model <- step(mod_cas, direction = "backward")
+
+glance(perf_model)$adj.r.squared
 ```
 
+The perfect model is shown below:
 
+```casualties ~ enrollment + factor(shooting_type) + staffing + 
+    lunch_percent + factor(resource_officer)```
+
+Its adjusted r-squared value is 0.1699588.
