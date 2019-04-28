@@ -110,4 +110,8 @@ mod_cas <- lm(casualties ~ day_of_week + black_percent + white_percent, data = s
 mod_cas
 ```
 
+```{r testing}
+school_shootings
+```
+
 
