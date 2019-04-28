@@ -93,17 +93,46 @@ school_shootings <- school_shootings %>%
 
 These are the variables that we will include in our model. We will then use model selection in order to find the most appropriate model to perform predictions. 
 
-Variables:
+- Eliminate useless variables:
 
-```day_of_week```
-```black_percent```
-```white_percent```
-```hispanic_percent```
-```asian_percent```
-```enrollment```
-```lunch_percent```
-```shooting_type```
+```{r}
+school_shootings <- school_shootings %>%
+  select(school_name, 
+         district_name, 
+         date, 
+         school_year, 
+         year, 
+         time, 
+         day_of_week, 
+         city, 
+         state, 
+         school_type, 
+         enrollment, 
+         killed, 
+         injured, 
+         casualties, 
+         shooting_type, 
+         age_shooter1, 
+         age_shooter2, 
+         gender_shooter1, 
+         gender_shooter2, 
+         race_ethnicity_shooter1, 
+         race_ethnicity_shooter2, 
+         shooter_relationship1, 
+         shooter_relationship2, 
+         resource_officer, 
+         weapon, 
+         staffing, 
+         white_percent, 
+         black_percent, 
+         hispanic_percent, 
+         asian_percent, 
+         lunch_percent)
+```
 
+### Full Model
+
+Going to start by creating a model with all variables and then narrowing it down to only 10 variables. 
 ```{r}
 mod_cas <- lm(casualties ~ day_of_week + black_percent + white_percent, data = school_shootings)
 

@@ -61,37 +61,22 @@ These are the variables that we will include in our model. We will then
 use model selection in order to find the most appropriate model to
 perform predictions.
 
-Variables:
+  - Eliminate useless variables:
 
-`day_of_week` `black_percent` `white_percent` `hispanic_percent`
-`asian_percent` `enrollment` `lunch_percent`
+### Full Model
 
-``` shooting_type```
+Going to start by creating a model with all variables and then narrowing
+it down to only 10 variables.
 
-```
-
-## 
-
-## Call:
-
-## lm(formula = casualties ~ day\_of\_week + black\_percent + white\_percent,
-
-## data = school\_shootings)
-
-## 
-
-## Coefficients:
-
-## (Intercept) day\_of\_weekMonday day\_of\_weekThursday
-
-## 1.5614 -0.1165 -0.7555
-
-## day\_of\_weekTuesday day\_of\_weekWednesday black\_percent
-
-## 0.4715 -0.2698 -0.8502
-
-## white\_percent
-
-## 1.7832
-
-\`\`\`
+    ## 
+    ## Call:
+    ## lm(formula = casualties ~ day_of_week + black_percent + white_percent, 
+    ##     data = school_shootings)
+    ## 
+    ## Coefficients:
+    ##          (Intercept)     day_of_weekMonday   day_of_weekThursday  
+    ##               1.5614               -0.1165               -0.7555  
+    ##   day_of_weekTuesday  day_of_weekWednesday         black_percent  
+    ##               0.4715               -0.2698               -0.8502  
+    ##        white_percent  
+    ##               1.7832
