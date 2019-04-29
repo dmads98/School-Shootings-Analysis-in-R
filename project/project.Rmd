@@ -273,7 +273,8 @@ school_shootings <- school_shootings %>%
          school_year, 
          year, 
          time, 
-         day_of_week, 
+         day_of_week,
+         lunch,
          city, 
          state, 
          school_type, 
@@ -304,21 +305,9 @@ school_shootings <- school_shootings %>%
 
 We first create a full model, which includes all potential variables. The ```step()``` function automates the backwards selection process for us.
 
-<center>
+```casualties ~ enrollment + factor(shooting_type) + staffing + white_percent + black_percent + hispanic_percent + asian_percent + lunch_percent + factor(resource_officer) + factor(day_of_week)```
 
-```casualties ~ 
-              enrollment +
-              factor(shooting_type) +
-              staffing + 
-              white_percent + 
-              black_percent +
-              hispanic_percent +
-              asian_percent +
-              lunch_percent +
-              factor(resource_officer) +
-              factor(day_of_week)```
-              
-</center>
+### Backwards Selection
 
 ```{r back-sel, results='hide', echo=FALSE}
 mod_cas <- lm(casualties ~ 
@@ -332,6 +321,8 @@ mod_cas <- lm(casualties ~
               lunch_percent +
               factor(resource_officer) +
               factor(day_of_week),
+              #(enrollment * staffing) +
+              #(lunch_percent * factor(resource_officer)),
               data = school_shootings)
 
 
@@ -344,12 +335,12 @@ perf_model %>%
   select(term, estimate)
 
 glance(perf_model)$adj.r.squared
+
 ```
 
 The perfect model is shown below:
 
-```casualties ~ enrollment + factor(shooting_type) + staffing + 
-    lunch_percent + factor(resource_officer)```
+```casualties ~ enrollment + staffing + lunch_percent + factor(resource_officer) + factor(shooting_type)```
 
 Its adjusted r-squared value is 0.1699588.
 
