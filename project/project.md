@@ -144,7 +144,8 @@ We create the following variables:
 
 `white_percent` `black_percent` `hispanic_percent` `asian_percent`
 `american_indian_alaska_native_percent` `school_type` `lunch_percent`
-`locale_type`
+
+``` locale_type```
 
 </center>
 
@@ -161,15 +162,46 @@ We create the following variables:
 ![](project_files/figure-gfm/dist-casualties-1.png)<!-- -->
 
 ### School Shootings by State
-
-Here is a visualization of school shootings per state in the
-U.S.
+Here is a visualization of school shootings per state in the U.S.
 
 ![](project_files/figure-gfm/testing-1.png)<!-- -->
 
-### Mean Casualties Estimation via Bootstrapping
+### Estimation via Bootstrapping
 
-# `{r bootstrap} # boot_dist <- school %>% #   # specify the variable of interest #   specify(response = rent) %>%  #   # generate 15000 bootstrap samples #   generate(reps = 15000, type = "bootstrap") %>%  #   # calculate the median of each bootstrap sample #   calculate(stat = "median") #`
+
+
+![](project_files/figure-gfm/bootstrap-1.png)<!-- -->
+```
+
+## \# A tibble: 1 x 2
+
+## lower\_bound upper\_bound
+
+## <dbl> <dbl>
+
+## 1 1.34 2.43
+
+\`\`\`
+
+The 95% confidence interval for the population mean number of casualties
+in a school shooting has a lower bound of 1.3445 and an upper bound of
+2.4328.
+
+## Shiny App
+
+Below is a shiny app you can use to explore some of the variables and
+the relationships between
+them.
+
+<!--html_preserve-->
+
+<div class="muted well" style="width: 100% ; height: 400px ; text-align: center; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;">
+
+Shiny applications not supported in static R Markdown documents
+
+</div>
+
+<!--/html_preserve-->
 
 ### Multivariate Regression Analysis
 
