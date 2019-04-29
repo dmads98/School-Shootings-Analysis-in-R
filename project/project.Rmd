@@ -27,6 +27,7 @@ knitr::opts_chunk$set(echo = FALSE)
 library(tidyverse)
 library(broom)
 library(lubridate)
+library(maps)
 ```
 
 ```{r load-data, message=FALSE}
@@ -337,17 +338,34 @@ mod_cas <- lm(casualties ~
 
 perf_model <- step(mod_cas, direction = "backward")
 
-perf_model %>%
-  tidy() %>%
-  select(term, estimate)
+#perf_model %>%
+#  tidy() %>%
+#  select(term, estimate)
 
-glance(perf_model)$adj.r.squared
+#glance(perf_model)$adj.r.squared
 
 ```
 
 The perfect model is shown below:
 
-```casualties ~ enrollment + staffing + lunch_percent + factor(resource_officer) + factor(shooting_type)```
+```casualties ~ enrollment + factor(shooting_type) + staffing + 
+    lunch_percent + factor(resource_officer) + american_indian_alaska_native_percent```
+    
+We can see the coefficients for each variable below:
+```{r}
+perf_mod <- lm(casualties ~ enrollment + 
+                 factor(shooting_type) + 
+                 staffing + 
+                 lunch_percent + 
+                 factor(resource_officer) + 
+                 american_indian_alaska_native_percent,
+               data = school_shootings)
+
+perf_mod %>%
+  tidy() %>%
+  select(term, estimate)
+```
+
 
 Its adjusted r-squared value is 0.1699588.
 
