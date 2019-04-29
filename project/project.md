@@ -9,8 +9,9 @@ March 29, 2018
 
 ### Number of Casualties Across the Years
 
-![](project_files/figure-gfm/freq-casualties-1.png)<!-- --> \#\#\#
-Distribution of Casualties
+![](project_files/figure-gfm/freq-casualties-1.png)<!-- -->
+
+### Distribution of Casualties
 
 ![](project_files/figure-gfm/dist-casualties-1.png)<!-- -->
 
@@ -63,35 +64,24 @@ perform predictions.
 
 Variables:
 
-`day_of_week` `black_percent` `white_percent` `hispanic_percent`
-`asian_percent` `enrollment` `lunch_percent`
+`day_of_week`, `black_percent`, `white_percent`, `hispanic_percent`,
+`asian_percent` ,`enrollment` ,`lunch_percent`, `shooting_type`
 
-``` shooting_type```
+Here is our model selection:
 
-```
+    ## 
+    ## Call:
+    ## lm(formula = casualties ~ day_of_week + black_percent + white_percent, 
+    ##     data = school_shootings)
+    ## 
+    ## Coefficients:
+    ##          (Intercept)     day_of_weekMonday   day_of_weekThursday  
+    ##               1.5614               -0.1165               -0.7555  
+    ##   day_of_weekTuesday  day_of_weekWednesday         black_percent  
+    ##               0.4715               -0.2698               -0.8502  
+    ##        white_percent  
+    ##               1.7832
 
-## 
+Here is a visualization of school shootings per state in the U.S.
 
-## Call:
-
-## lm(formula = casualties ~ day\_of\_week + black\_percent + white\_percent,
-
-## data = school\_shootings)
-
-## 
-
-## Coefficients:
-
-## (Intercept) day\_of\_weekMonday day\_of\_weekThursday
-
-## 1.5614 -0.1165 -0.7555
-
-## day\_of\_weekTuesday day\_of\_weekWednesday black\_percent
-
-## 0.4715 -0.2698 -0.8502
-
-## white\_percent
-
-## 1.7832
-
-\`\`\`
+![](project_files/figure-gfm/testing-1.png)<!-- -->
