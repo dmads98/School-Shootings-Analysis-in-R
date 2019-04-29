@@ -30,6 +30,8 @@ library(broom)
 library(infer)
 library(shiny)
 library(tools)
+install.packages("mapdata")
+install.packages("mapproj")
 ```
 
 ```{r load-data, message=FALSE, echo = FALSE}
