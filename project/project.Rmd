@@ -31,9 +31,9 @@ library(infer)
 school_shootings <- read_csv("../data/school-shootings-data.csv")
 ```
 
-### Hypothesis Test: Compare California to Florida
+### Hypothesis Test: Compare Mean of Casualties when Resource Officer is present/not present
 
-```{r flor-hyptest}
+```{r resofficer-hyptest}
 set.seed(7749)
 
 res_office <- school_shootings %>%

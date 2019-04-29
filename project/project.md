@@ -63,11 +63,12 @@ weapon, weapon\_source, lat, long, staffing, low\_grade, high\_grade,
 lunch, county, state\_fips, county\_fips, ulocale
 
 More information on the description of these variables can be found
-under the codebook in the `data` folder.
+under the codebook in the `data`
+folder.
 
-### Hypothesis Test: Compare California to Florida
+### Hypothesis Test: Compare Mean of Casualties when Resource Officer is present/not present
 
-![](project_files/figure-gfm/flor-hyptest-1.png)<!-- -->
+![](project_files/figure-gfm/resofficer-hyptest-1.png)<!-- -->
 
     ## # A tibble: 1 x 2
     ##   lower_bound upper_bound
