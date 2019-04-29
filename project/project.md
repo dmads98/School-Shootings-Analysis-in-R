@@ -91,6 +91,8 @@ difference in mean casualties of school shootings that occured when
 resource officers were present vs. when they weren’t is between -1.035
 dollars and 1.12.
 
+## Section 2. Data Analysis
+
 ### In Line with Previous Literature?
 
 ##### Vossekuil’s Study
@@ -167,8 +169,9 @@ We create the following variables:
 <center>
 
 `white_percent` `black_percent` `hispanic_percent` `asian_percent`
+`american_indian_alaska_native_percent` `school_type` `lunch_percent`
 
-``` lunch_percent```
+``` locale_type```
 
 </center>
 
@@ -184,70 +187,52 @@ We create the following variables:
 
 ![](project_files/figure-gfm/dist-casualties-1.png)<!-- -->
 
-### Popular Types of Shootings
+### School Shootings by State
+Here is a visualization of school shootings per state in the U.S.
 
+![](project_files/figure-gfm/testing-1.png)<!-- -->
+
+### Estimation via Bootstrapping
+
+
+
+![](project_files/figure-gfm/bootstrap-1.png)<!-- -->
 ```
 
-## \# A tibble: 10 x 2
+## \# A tibble: 1 x 2
 
-## \# Groups: shooting\_type \[10\]
+## lower\_bound upper\_bound
 
-## shooting\_type n
+## <dbl> <dbl>
 
-## <chr> <int>
-
-## 1 targeted 140
-
-## 2 indiscriminate 45
-
-## 3 accidental 28
-
-## 4 unclear 9
-
-## 5 targeted and indiscriminate 6
-
-## 6 public suicide 4
-
-## 7 accidental or targeted 2
-
-## 8 hostage suicide 2
-
-## 9 public suicide (attempted) 1
-
-## 10 <NA> 1
-
-``` 
-Most of the shootings in our dataset were categorized as targeted.
-
-### Popular Days
-
-```
-
-## \# A tibble: 5 x 2
-
-## \# Groups: day\_of\_week \[5\]
-
-## day\_of\_week n
-
-## <chr> <int>
-
-## 1 Tuesday 55
-
-## 2 Wednesday 53
-
-## 3 Monday 48
-
-## 4 Friday 45
-
-## 5 Thursday 37
+## 1 1.34 2.43
 
 \`\`\`
 
-There seems to be minimal difference in the number of shootings among
-days of the week, but Tuesday and Wednesday are the days with the most
-school shootings taking place.
+The 95% confidence interval for the population mean number of casualties
+in a school shooting has a lower bound of 1.3445 and an upper bound of
+2.4328.
+
+## Shiny App
+
+Below is a shiny app you can use to explore some of the variables and
+the relationships between
+them.
+
+<!--html_preserve-->
+
+<div class="muted well" style="width: 100% ; height: 400px ; text-align: center; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;">
+
+Shiny applications not supported in static R Markdown documents
+
+</div>
+
+<!--/html_preserve-->
 
 ### Multivariate Regression Analysis
+
+Next, we eliminate variables that will not be useful in our model, such
+as those used for logistical purposes.
 
 These are the variables that we will include in our model:
 
@@ -256,38 +241,29 @@ These are the variables that we will include in our model:
 `enrollment` `factor(shooting_type)` `staffing` `white_percent`
 `black_percent` `hispanic_percent` `asian_percent` `lunch_percent`
 `factor(resource_officer)` `factor(day_of_week)`
+`american_indian_alaska_native_percent`
 
 </center>
 
 ### Model Creation and Backwards Selection
 
-First, we eliminate variables that will not be useful in our model, such
-as those used for logistical purposes.
-
-### Full Model
-
 We first create a full model, which includes all potential variables.
 The `step()` function automates the backwards selection process for us.
 
-<center>
-
 `casualties ~ enrollment + factor(shooting_type) + staffing +
 white_percent + black_percent + hispanic_percent + asian_percent +
-lunch_percent + factor(resource_officer) + factor(day_of_week)`
+lunch_percent + factor(resource_officer) + factor(day_of_week) +
+american_indian_alaska_native_percent`
 
-</center>
+### Backwards Selection
 
 The perfect model is shown below:
 
 `casualties ~ enrollment + factor(shooting_type) + staffing +
-lunch_percent + factor(resource_officer)`
+lunch_percent + factor(resource_officer) +
+american_indian_alaska_native_percent`
 
-Its adjusted r-squared value is 0.1699588.
-
-### Conclusion
-
-Our analysis found that the best model included the variables
-`enrollment``,`shooting\_type`,`staffing`,`lunch\_percent`and`resource\_officer\`\`\`.
+Its adjusted r-squared value is 0.1783479.
 
 ## Section 3. Discussion and Conclusion
 
