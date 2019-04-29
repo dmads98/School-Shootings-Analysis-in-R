@@ -130,3 +130,10 @@ The perfect model is shown below:
 lunch_percent + factor(resource_officer)`
 
 Its adjusted r-squared value is 0.1699588.
+
+### Testing of Model
+
+### Conclusion
+
+Our analysis found that the best model included the variables
+`enrollment``,`shooting\_type`,`staffing`,`lunch\_percent`and`resource\_officer\`\`\`.
