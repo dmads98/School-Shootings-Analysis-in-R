@@ -2,7 +2,8 @@
 title: "Exploratory Analysis of School Shootings"
 author: "Significantly Different"
 date: "March 29, 2018"
-output: github_document
+output: html_document
+runtime: shiny
 ---
 
 ## Section 1. Introduction
@@ -26,7 +27,9 @@ knitr::opts_chunk$set(echo = FALSE)
 ```{r load-packages, message=FALSE}
 library(tidyverse)
 library(broom)
-install.packages("mapproj")
+library(infer)
+library(shiny)
+library(tools)
 ```
 
 ```{r load-data, message=FALSE}
@@ -117,6 +120,7 @@ Of 238 observations, 148 observations do not have the source of weapon included 
 ### Mutation of Variables
 
 We begin by manipulating some of our variables in order to make them more useful. For example, many of our variables are raw and thus, converting them to percentages will be more useful and standardized. 
+
 ```{r mutation-races}
 school_shootings <- school_shootings %>%
   mutate(white_percent = white/enrollment,
@@ -167,20 +171,18 @@ school_shootings <- school_shootings %>%
 ))
 ```
 
+```{r resource-officer}
+school_shootings <- school_shootings %>%
+    mutate(resource_officer = case_when(
+        resource_officer == 1 ~ "Yes",
+        TRUE ~ "No"
+    ))
+```
+
 We create the following variables:
 
-<center>
+```white_percent```, ```black_percent```, ```hispanic_percent```, ```asian_percent```, ```american_indian_alaska_native_percent```, ```school_type```, ```lunch_percent```, ```locale_type```
 
-```white_percent```
-```black_percent```
-```hispanic_percent```
-```asian_percent```
-```american_indian_alaska_native_percent```
-```school_type```
-```lunch_percent```
-```locale_type```
-
-</center>
 
 ### Frequency of Annual School Shootings
 
@@ -218,6 +220,7 @@ school_shootings %>%
 ```
 
 ### School Shootings by State
+
 Here is a visualization of school shootings per state in the U.S.
 
 ```{r testing, message=FALSE, warning=FALSE}
@@ -259,20 +262,145 @@ us <- map_data("state")
 
 ggplot(school_shootings_state, aes(map_id = state)) + geom_map(aes(fill = Shootings), map = us) + 
     labs(title = "School Shooting Distribution in U.S.", fill = "Shootings") + expand_limits(x = us$long, y = us$lat) + 
-    coord_map("polyconic") + theme_map() + scale_fill_gradient(low = "#FFCCCC", high = "#CB454A")
+    coord_map("polyconic") + theme_map() + scale_fill_gradient(low = "#FFCCCC", high = "#FF0000")
 ```
 
-### Mean Casualties Estimation via Bootstrapping
+### Estimation via Bootstrapping
 
-# ```{r bootstrap}
-# boot_dist <- school %>%
-#   # specify the variable of interest
-#   specify(response = rent) %>% 
-#   # generate 15000 bootstrap samples
-#   generate(reps = 15000, type = "bootstrap") %>% 
-#   # calculate the median of each bootstrap sample
-#   calculate(stat = "median")
-# ```
+```{r set-seed}
+set.seed(042918)
+```
+
+```{r bootstrap}
+boot_dist <- school_shootings %>%
+  # specify the variable of interest
+  specify(response = casualties) %>%
+  # generate 15000 bootstrap samples
+  generate(reps = 15000, type = "bootstrap") %>%
+  # calculate the mean of each bootstrap sample
+  calculate(stat = "mean")
+
+ggplot(data = boot_dist, mapping = aes(x = stat)) +
+  geom_histogram(binwidth = 0.1) +
+  labs(title = "Bootstrap distribution of means")
+
+boot_dist %>%
+  summarize(lower_bound = quantile(stat, 0.025),
+            upper_bound = quantile(stat, 0.975))
+```
+
+The 95% confidence interval for the population mean number of casualties in a school shooting has a lower bound of 1.3445 and an upper bound of 2.4328.
+
+## Shiny App
+
+Below is a shiny app you can use to explore some of the variables and the relationships between them.
+
+```{r shiny-app, echo = FALSE}
+# Define UI ---------------------------------------------------------------------
+ui <- navbarPage("School Shooting Visualizations",
+  tabPanel("Bar Graphs",
+    fluidPage(
+      # Sidebar layout with a input and output definitions
+      sidebarLayout(
+        # Inputs: Select variables to plot
+        sidebarPanel(
+          # Select variable for x-axis
+          selectInput(inputId = "x1", label = "Choose a variable:",
+            choices = c("State" = "state", 
+                        "School Type" = "school_type", 
+                        "Shooting Type" = "shooting_type", 
+                        "Locale Type" = "locale_type",
+                        "School Type" = "school_type",
+                        "Resource Officer Present" = "resource_officer"), 
+            selected = "state")),
+         # Output:
+         mainPanel(
+            # Show scatterplot
+            plotOutput(outputId = "bar"),
+            br()       # a little bit of visual separation
+         )
+      )
+    )
+  ),
+  tabPanel("ScatterPlot",
+    fluidPage(
+  
+      # Sidebar layout with a input and output definitions
+      sidebarLayout(
+  
+        # Inputs: Select variables to plot
+        sidebarPanel(
+  
+            # Select variable for x-axis
+            selectInput(inputId = "x2", 
+            label = "Choose an independent variable:",
+            choices = c("Percent Students White" = "white_percent",
+                      "Percent Students Black" = "black_percent",
+                      "Percent Students Hispanic" = "hispanic_percent",
+                      "Percent Students Asian" = "asian_percent",
+                      "Percent Students American Indian/Alaska Native" = "american_indian_alaska_native_percent",
+                      "Percent Students Offered Lunch Benefits" = "lunch_percent",
+                      "Staffing" = "staffing", 
+                      "Year" = "year", 
+                      "Student Enrollment" = "enrollment",
+                      "Age of Shooter" = "age_shooter1"), 
+            selected = "state"),
+            # Select variable for color
+            selectInput(inputId = "z", 
+            label = "Color by:",
+            choices = c("School Type" = "school_type", 
+                      "Shooting Type" = "shooting_type", 
+                      "Locale Type" = "locale_type",
+                      "School Type" = "school_type",
+                      "Resource Officer Present" = "resource_officer",
+                      "Shooter Gender" = "gender_shooter1",
+                      "Shooter Race" = "race_ethnicity_shooter1"),
+            selected = "School Type"),
+            # Set alpha level
+            sliderInput(inputId = "alpha", 
+            label = "Alpha:", 
+            min = 0, max = 1, 
+            value = 0.5)
+  ),
+  
+  # Output:
+  mainPanel(
+  
+      # Show scatterplot
+      plotOutput(outputId = "scatterplot"),
+      br()       # a little bit of visual separation
+  
+  )
+  )
+  )
+  )
+  )
+
+# Define server function --------------------------------------------
+server <- function(input, output) {
+    
+    # Create bar graph object the plotOutput function is expecting
+    output$bar <- renderPlot({
+        ggplot(data = school_shootings, aes_string(x = input$x1)) +
+            geom_bar() +
+            labs(x = toTitleCase(str_replace_all(input$x1, "_", " "))) +
+            coord_flip()
+    })
+    
+    output$scatterplot <- renderPlot({
+        ggplot(data = school_shootings, aes_string(x = input$x2, y = school_shootings$casualties,
+                                                  color = input$z)) +
+            geom_point(alpha = input$alpha) +
+            labs(x = toTitleCase(str_replace_all(input$x2, "_", " ")),
+                 y = "Casualties",
+                 color = toTitleCase(str_replace_all(input$z, "_", " ")))
+    })
+    
+}
+
+# Run the application 
+shinyApp(ui = ui, server = server)
+```
 
 ### Multivariate Regression Analysis
 
@@ -334,7 +462,11 @@ These are the variables that we will include in our model:
 
 We first create a full model, which includes all potential variables. The ```step()``` function automates the backwards selection process for us.
 
+<center>
+
 ```casualties ~ enrollment + factor(shooting_type) + staffing + white_percent + black_percent + hispanic_percent + asian_percent + lunch_percent + factor(resource_officer) + factor(day_of_week) + american_indian_alaska_native_percent```
+              
+</center>
 
 ### Backwards Selection
 
@@ -359,11 +491,10 @@ mod_cas <- lm(casualties ~
               data = school_shootings)
 
 
-
-#glance(mod_cas)$adj.r.squared
-
 perf_model <- step(mod_cas, direction = "backward")
+```
 
+```{r model-coefficients}
 perf_model %>%
   tidy() %>%
   select(term, estimate)
@@ -374,12 +505,12 @@ glance(perf_model)$adj.r.squared
 
 The perfect model is shown below:
 
+
+### Conclusion
 ```casualties ~ enrollment + factor(shooting_type) + staffing + 
     lunch_percent + factor(resource_officer) + american_indian_alaska_native_percent```
 
 Its adjusted r-squared value is 0.1783479.
-
-
 
 ## Section 3. Discussion and Conclusion
 
