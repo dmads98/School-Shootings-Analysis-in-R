@@ -377,11 +377,7 @@ The perfect model is shown below:
 
 Its adjusted r-squared value is 0.1699588.
 
-### Testing of Model
 
-### Conclusion
-
-Our analysis found that the best model included the variables ```enrollment```, ```shooting_type```, ```staffing```, ```lunch_percent``` and ```resource_officer```. 
 
 ## Section 3. Discussion and Conclusion
 
