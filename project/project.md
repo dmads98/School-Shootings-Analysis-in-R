@@ -1,4 +1,5 @@
 Exploratory Analysis of School Shootings
+================
 Significantly Different
 March 29, 2018
 
@@ -110,15 +111,13 @@ The `step()` function automates the backwards selection process for us.
 
 `casualties ~ enrollment + factor(shooting_type) + staffing +
 white_percent + black_percent + hispanic_percent + asian_percent +
-lunch_percent + factor(resource_officer) + factor(day_of_week) +
-(enrollment * staffing) + (lunch_percent * factor(resource_officer))`
+lunch_percent + factor(resource_officer) + factor(day_of_week)`
 
 ### Backwards Selection
 
 The perfect model is shown below:
 
 `casualties ~ enrollment + staffing + lunch_percent +
-factor(resource_officer) + enrollment:staffing +
-lunch_percent:factor(resource_officer) + factor(shooting_type)`
+factor(resource_officer) + factor(shooting_type)`
 
 Its adjusted r-squared value is 0.1979681.
