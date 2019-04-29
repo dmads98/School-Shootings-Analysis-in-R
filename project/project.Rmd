@@ -26,6 +26,7 @@ knitr::opts_chunk$set(echo = FALSE)
 ```{r load-packages, message=FALSE}
 library(tidyverse)
 library(broom)
+install.packages("mapproj")
 ```
 
 ```{r load-data, message=FALSE}
@@ -333,7 +334,7 @@ These are the variables that we will include in our model:
 
 We first create a full model, which includes all potential variables. The ```step()``` function automates the backwards selection process for us.
 
-```casualties ~ enrollment + factor(shooting_type) + staffing + white_percent + black_percent + hispanic_percent + asian_percent + lunch_percent + factor(resource_officer) + factor(day_of_week)```
+```casualties ~ enrollment + factor(shooting_type) + staffing + white_percent + black_percent + hispanic_percent + asian_percent + lunch_percent + factor(resource_officer) + factor(day_of_week) + american_indian_alaska_native_percent```
 
 ### Backwards Selection
 
