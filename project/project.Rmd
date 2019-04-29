@@ -19,6 +19,35 @@ library(broom)
 school_shootings <- read_csv("../data/school-shootings-data.csv")
 ```
 
+### Mutation of Variables
+
+We begin by manipulating some of our variables in order to make them more useful. For example, many of our variables are raw and thus, converting them to percentages will be more useful and standardized. 
+
+```{r mutation-races, echo=FALSE}
+school_shootings <- school_shootings %>%
+  mutate(white_percent = white/enrollment,
+         black_percent = black/enrollment,
+         hispanic_percent = hispanic/enrollment,
+         asian_percent = asian/enrollment)
+```
+
+```{r lunch-percent, echo=FALSE}
+school_shootings <- school_shootings %>%
+  mutate(lunch_percent = lunch/enrollment)
+```
+
+We create the following variables:
+
+<center>
+
+```white_percent```
+```black_percent```
+```hispanic_percent```
+```asian_percent```
+```lunch_percent```
+
+</center>
+
 ### Frequency of Annual School Shootings
 
 ```{r quan-shootings, fig.width=5, echo=FALSE}
@@ -66,46 +95,20 @@ school_shootings %>%
 Most of the shootings in our dataset were categorized as targeted.
 
 ### Popular Days
+
 ```{r pop-days, echo=FALSE}
 school_shootings %>%
   group_by(day_of_week) %>%
   count() %>%
   arrange(desc(n))
 ```
+
 There seems to be minimal difference in the number of shootings among days of the week, but Tuesday and Wednesday are the days with the most school shootings taking place. 
-
-### Mutation of Variables
-
-We wanted to manipulate some of our variables in order to make them more useful. For example, many of our variables are raw and thus, converting them to percentages will be more useful and standardized. 
-
-```{r mutation-races, echo=FALSE}
-school_shootings <- school_shootings %>%
-  mutate(white_percent = white/enrollment,
-         black_percent = black/enrollment,
-         hispanic_percent = hispanic/enrollment,
-         asian_percent = asian/enrollment)
-```
-
-```{r lunch-percent, echo=FALSE}
-school_shootings <- school_shootings %>%
-  mutate(lunch_percent = lunch/enrollment)
-```
-
-We create the following variables:
-
-<center>
-
-```white_percent```
-```black_percent```
-```hispanic_percent```
-```asian_percent```
-```lunch_percent```
-
-</center>
 
 ### Multivariate Regression Analysis
 
 These are the variables that we will include in our model:
+
 <center>
 
 ```enrollment``` 
