@@ -85,17 +85,10 @@ officer present vs. when there isn’t. The alternative hypothesis is that
 there is a difference in mean number of casualties of school shootings
 when there is an officer present vs. when there isn’t.
 
-CORRECT THIS ANALYSIS
-
-According to the null distribution, the center of the distribution falls
-at 0, which means that the null hypothesis is supported, and the data
-does not provide convincing evidence of a difference in median number of
-casualties of school shootings that occured in Florida vs. other
-states..
-
 The 95% confidence interval shows that we are 95% confident that the
-difference in median casualties of school shootings that occured in
-Florida vs. those that occured elsewhere is between -.05 dollars and 0.
+difference in mean casualties of school shootings that occured when
+resource officers were present vs. when they weren’t is between -1.035
+dollars and 1.12.
 
 ### In Line with Previous Literature?
 
