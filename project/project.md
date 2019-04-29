@@ -215,6 +215,7 @@ These are the variables that we will include in our model:
 `enrollment` `factor(shooting_type)` `staffing` `white_percent`
 `black_percent` `hispanic_percent` `asian_percent` `lunch_percent`
 `factor(resource_officer)` `factor(day_of_week)`
+`american_indian_alaska_native_percent`
 
 </center>
 
@@ -223,28 +224,20 @@ These are the variables that we will include in our model:
 We first create a full model, which includes all potential variables.
 The `step()` function automates the backwards selection process for us.
 
-<center>
-
 `casualties ~ enrollment + factor(shooting_type) + staffing +
 white_percent + black_percent + hispanic_percent + asian_percent +
-lunch_percent + factor(resource_officer) + factor(day_of_week)`
+lunch_percent + factor(resource_officer) + factor(day_of_week) +
+american_indian_alaska_native_percent`
 
-</center>
+### Backwards Selection
 
 The perfect model is shown below:
 
 `casualties ~ enrollment + factor(shooting_type) + staffing +
-lunch_percent + factor(resource_officer)`
+lunch_percent + factor(resource_officer) +
+american_indian_alaska_native_percent`
 
-Its adjusted r-squared value is 0.1699588.
-
-### Testing of Model
-
-### Conclusion
-
-Our analysis found that the best model included the variables
-`enrollment`, `shooting_type`, `staffing`, `lunch_percent` and
-`resource_officer`.
+Its adjusted r-squared value is 0.1783479.
 
 ## Section 3. Discussion and Conclusion
 
