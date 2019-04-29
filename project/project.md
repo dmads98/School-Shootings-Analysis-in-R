@@ -325,15 +325,16 @@ given data, one possibility is that these schools had better preventive
 measures established prior to the shooting occurrence.
 
 A few limitations exist in this analysis. First, our data may have
-potentially been unreliable, as it got information from that available
-to the public–at times, the gender or age of the shooters wasn’t
-reported, for example. Also, there were several variables and data that
-would have been interesting to look at to provide a fuller understanding
-of our analysis such as “rate of reported bullying”, as the literature
-suggests bullying as one of the main causes of school shootings.
-Although the `lunch` variable is indicative of the SES status of the
-students in the school, an “average/median family income” would have
-helped better explain the significance of this variable. Finally,
+potentially been unreliable, as it got information from only that
+available to the public–at times, the gender or age of the shooters
+wasn’t reported, for example, and there were a lot of missing
+information on the shooter’s profile. Also, there were several variables
+and data that would have been interesting to look at to provide a fuller
+understanding of our analysis such as “rate of reported bullying”, as
+the literature suggests bullying as one of the main causes of school
+shootings. Although the `lunch` variable is indicative of the SES status
+of the students in the school, an “average/median family income” would
+have helped better explain the significance of this variable. Finally,
 because we didn’t have any data for schools that don’t have shootings,
 we were not able to analyze and assess how schools that experienced
 shootings were different from those that did not. More information on
