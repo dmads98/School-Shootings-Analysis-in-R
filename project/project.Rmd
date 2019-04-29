@@ -74,7 +74,6 @@ school_shootings %>%
   labs(title = "Number of annual school shootings", subtitle = "1999 - 2018") +
   ylab("Frequency") +
   xlab("Year")
-
 ```
 
 ### Number of Casualties Across the Years
@@ -120,12 +119,90 @@ school_shootings %>%
 
 There seems to be minimal difference in the number of shootings among days of the week, but Tuesday and Wednesday are the days with the most school shootings taking place. 
 
+### Mutation of Variables
+
+We wanted to manipulate some of our variables in order to make them more useful. For example, many of our variables are raw and thus, converting them to percentages will be more useful and standardized. 
+```{r mutation-races}
+school_shootings <- school_shootings %>%
+  mutate(white_percent = white/enrollment,
+         black_percent = black/enrollment,
+         hispanic_percent = hispanic/enrollment,
+         asian_percent = asian/enrollment)
+```
+
+```{r lunch-percent}
+school_shootings <- school_shootings %>%
+  mutate(lunch_percent = lunch/enrollment)
+```
+
+```{r ulocale-factoring}
+school_shootings <- school_shootings %>%
+  mutate(locale_type = case_when(
+    ulocale == 11 ~ "City",
+    ulocale == 12 ~ "City",
+    ulocale == 13 ~ "City",
+    ulocale == 21 ~ "Suburb",
+    ulocale == 22 ~ "Suburb",
+    ulocale == 23 ~ "Suburb",
+    ulocale == 31 ~ "Town",
+    ulocale == 32 ~ "Town",
+    ulocale == 33 ~ "Town",
+    ulocale == 41 ~ "Rural",
+    ulocale == 42 ~ "Rural",
+    ulocale == 43 ~ "Rural"
+  ))
+```
+
+Here is a visualization of school shootings per state in the U.S.
+
+```{r testing, message=FALSE, warning=FALSE}
+library(mapdata)
+library(maps)
+library(reshape2)
+
+theme_map <- function(base_size = 12, base_family = "") {
+    # Starts with theme_grey and then modify some parts
+    theme_bw(base_size = base_size, base_family = base_family) %+replace% theme(strip.background = element_blank(),
+        strip.text.x = element_text(size = 18), strip.text.y = element_text(size = 18),
+        axis.text.x = element_blank(), axis.text.y = element_blank(), axis.ticks = element_blank(),
+        axis.title.x = element_blank(), axis.title.y = element_blank(), panel.background = element_blank(),
+        panel.border = element_blank(), panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(), panel.margin = unit(0.1, "lines"),
+        plot.background = element_blank(), plot.margin = unit(c(0.25, 0.5, 0,
+            0), "lines"), axis.line = element_blank(), legend.background = element_blank(),
+        legend.margin = unit(0.1, "line"), legend.title = element_text(size = 14,
+            colour = "black"), legend.text = element_text(size = 14, colour = "black",
+            hjust = 0.2), legend.key = element_blank(), legend.key.width = unit(1.5,
+            "line"), legend.key.height = unit(1.5, "line"))
+
+}
+
+school_shootings_state <- school_shootings %>%
+  count(state) %>%
+  mutate(Shootings = n) %>%
+  select(state, Shootings)
+
+missing_states <- data.frame("Shootings" = c(0,0,0,0,0,0,0,0), "state" = c("Delaware", "Idaho", "Iowa", "Maine", "North Dakota", "Vermont", "West Virginia", "Wyoming"), stringsAsFactors = FALSE)
+
+school_shootings_state <- rbind(school_shootings_state, missing_states) %>% arrange(state) %>%
+  mutate(state = tolower(state))
+
+school_shootings_state$state <- as.factor(school_shootings_state$state)
+
+school_shootings_state <- subset(school_shootings_state, state != "District of Columbia")
+
+us <- map_data("state")
+
+ggplot(school_shootings_state, aes(map_id = state)) + geom_map(aes(fill = Shootings), map = us) + 
+    labs(title = "School Shooting Distribution in U.S.", fill = "Shootings") + expand_limits(x = us$long, y = us$lat) + 
+    coord_map("polyconic") + theme_map() + scale_fill_gradient(low = "#FFCCCC", high = "#CB454A")
+
 ### Multivariate Regression Analysis
 
 These are the variables that we will include in our model:
 
 <center>
-
+  
 ```enrollment``` 
 ```factor(shooting_type)```
 ```staffing```

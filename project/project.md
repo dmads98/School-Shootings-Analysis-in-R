@@ -118,6 +118,29 @@ We create the following variables:
 
 ## 5 targeted and indiscriminate 6
 
+
+`day_of_week`, `black_percent`, `white_percent`, `hispanic_percent`,
+`asian_percent` ,`enrollment` ,`lunch_percent`, `shooting_type`
+
+Here is our model selection:
+
+    ## 
+    ## Call:
+    ## lm(formula = casualties ~ day_of_week + black_percent + white_percent, 
+    ##     data = school_shootings)
+    ## 
+    ## Coefficients:
+    ##          (Intercept)     day_of_weekMonday   day_of_weekThursday  
+    ##               1.5614               -0.1165               -0.7555  
+    ##   day_of_weekTuesday  day_of_weekWednesday         black_percent  
+    ##               0.4715               -0.2698               -0.8502  
+    ##        white_percent  
+    ##               1.7832
+
+Here is a visualization of school shootings per state in the U.S.
+
+![](project_files/figure-gfm/testing-1.png)<!-- -->
+=======
 ## 6 public suicide 4
 
 ## 7 accidental or targeted 2
@@ -258,3 +281,4 @@ statistical analysis, although we looked at the number of casualties in
 a numerical perspective, we could have looked at it in a categorical way
 by comparing schools that had shootings with no casualties to schools
 that had shootings with one or more casualties.
+
