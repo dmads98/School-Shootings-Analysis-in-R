@@ -120,4 +120,4 @@ The perfect model is shown below:
 `casualties ~ enrollment + staffing + lunch_percent +
 factor(resource_officer) + factor(shooting_type)`
 
-Its adjusted r-squared value is 0.1979681.
+Its adjusted r-squared value is 0.1699588.
