@@ -65,6 +65,38 @@ lunch, county, state\_fips, county\_fips, ulocale
 More information on the description of these variables can be found
 under the codebook in the `data` folder.
 
+### Hypothesis Test: Compare California to Florida
+
+![](project_files/figure-gfm/flor-hyptest-1.png)<!-- -->
+
+    ## # A tibble: 1 x 2
+    ##   lower_bound upper_bound
+    ##         <dbl>       <dbl>
+    ## 1       -1.04        1.12
+
+    ## # A tibble: 1 x 1
+    ##   p_value
+    ##     <dbl>
+    ## 1   0.006
+
+In this scenario, the null hypothesis is that there is no difference in
+mean number casualties of school shootings that occured when there is a
+officer present vs. when there isn’t. The alternative hypothesis is that
+there is a difference in mean number of casualties of school shootings
+when there is an officer present vs. when there isn’t.
+
+CORRECT THIS ANALYSIS
+
+According to the null distribution, the center of the distribution falls
+at 0, which means that the null hypothesis is supported, and the data
+does not provide convincing evidence of a difference in median number of
+casualties of school shootings that occured in Florida vs. other
+states..
+
+The 95% confidence interval shows that we are 95% confident that the
+difference in median casualties of school shootings that occured in
+Florida vs. those that occured elsewhere is between -.05 dollars and 0.
+
 ### In Line with Previous Literature?
 
 ##### Vossekuil’s Study
