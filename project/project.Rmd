@@ -5,6 +5,10 @@ date: "March 29, 2018"
 output: github_document
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
 ## Section 1. Introduction
 
 Gun control has been an issue of huge debate in the United States: from individuals claiming that the possession of guns is necessary to protect one’s own safety to others who claim that it’s a “right” bestowed by the constitution, gun control seems to imply different things to different people. With a huge market of gun sales being run by capitalism, it doesn’t seem like any number of casualties caused by gun violence will be sufficient to make up for the monetary loss a ban on guns would have on our capitalist market — which is to some extent why we still have gun control issues going on in the United States. Such issue of gun violence has unfortunately been spilling into our schools, and school shootings have become the issue of concern for teachers, school districts, and families in hopes of never having to face such an incident. The lack of control and support the government and community provided towards this issue has unfortunately lead to schools carrying the burden of coming up with preventative measures to ensure their students’ safety — a high school in South Florida, for example, has brought up and implemented the idea of a bullet-proof shelter to protect children from harm, and another school in Texas asked the students to wear a clear backpack to school. Despite such efforts, school shootings still break out, leading researchers and school officials to increasingly work more to figure out the best ways to prevent school shootings from occurring.
@@ -18,11 +22,6 @@ uid, nces_school_id, school_name, nces_district_id, district_name, date, school_
 More information on the description of these variables can be found under the codebook in the ```data``` folder. 
 
 ## Section 2. Data Analysis
-
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
-```
 
 ```{r load-packages, message=FALSE}
 library(tidyverse)
@@ -38,90 +37,6 @@ school_shootings <- read_csv("../data/school-shootings-data.csv")
 
 We begin by manipulating some of our variables in order to make them more useful. For example, many of our variables are raw and thus, converting them to percentages will be more useful and standardized. 
 
-```{r mutation-races, echo=FALSE}
-school_shootings <- school_shootings %>%
-  mutate(white_percent = white/enrollment,
-         black_percent = black/enrollment,
-         hispanic_percent = hispanic/enrollment,
-         asian_percent = asian/enrollment)
-```
-
-```{r lunch-percent, echo=FALSE}
-school_shootings <- school_shootings %>%
-  mutate(lunch_percent = lunch/enrollment)
-```
-
-We create the following variables:
-
-<center>
-
-```white_percent```
-```black_percent```
-```hispanic_percent```
-```asian_percent```
-```lunch_percent```
-
-</center>
-
-### Frequency of Annual School Shootings
-
-```{r quan-shootings, fig.width=5, echo=FALSE}
-school_shootings %>%
-  group_by(year) %>%
-  count() %>%
-  ggplot(mapping = aes(x = year, y = n)) +
-  geom_line() +
-  labs(title = "Number of annual school shootings", subtitle = "1999 - 2018") +
-  ylab("Frequency") +
-  xlab("Year")
-```
-
-### Number of Casualties Across the Years
-
-```{r freq-casualties, fig.width=6, echo=FALSE}
-school_shootings %>%
-  ggplot(mapping = aes(x = year, y = casualties)) +
-  geom_point() +
-  labs(title = "Casualties over the years 1999 - 2018") +
-  ylab("Casualties") +
-  xlab("Year")
-```
-
-### Distribution of Casualties
-
-```{r dist-casualties, fig.width=5, echo=FALSE}
-school_shootings %>%
-  ggplot(mapping = aes(x = casualties)) +
-  geom_bar() +
-  labs(title = "Distribution of Casualties", subtitle = "School Shootings from 1999-2018") +
-  xlab("Casualties") +
-  ylab("Frequency")
-```
-
-### Popular Types of Shootings
-
-```{r pop-shoot-type, echo=FALSE}
-school_shootings %>%
-  group_by(shooting_type) %>%
-  count() %>%
-  arrange(desc(n))
-```
-Most of the shootings in our dataset were categorized as targeted.
-
-### Popular Days
-
-```{r pop-days, echo= FALSE}
-school_shootings %>%
-  group_by(day_of_week) %>%
-  count() %>%
-  arrange(desc(n))
-```
-
-There seems to be minimal difference in the number of shootings among days of the week, but Tuesday and Wednesday are the days with the most school shootings taking place. 
-
-### Mutation of Variables
-
-We wanted to manipulate some of our variables in order to make them more useful. For example, many of our variables are raw and thus, converting them to percentages will be more useful and standardized. 
 ```{r mutation-races}
 school_shootings <- school_shootings %>%
   mutate(white_percent = white/enrollment,
@@ -153,6 +68,56 @@ school_shootings <- school_shootings %>%
   ))
 ```
 
+We create the following variables:
+
+<center>
+
+```white_percent```
+```black_percent```
+```hispanic_percent```
+```asian_percent```
+```lunch_percent```
+```locale_type```
+
+</center>
+
+### Frequency of Annual School Shootings
+
+```{r quan-shootings, fig.width=5}
+school_shootings %>%
+  group_by(year) %>%
+  count() %>%
+  ggplot(mapping = aes(x = year, y = n)) +
+  geom_line() +
+  labs(title = "Number of annual school shootings", subtitle = "1999 - 2018") +
+  ylab("Frequency") +
+  xlab("Year")
+```
+
+### Number of Casualties Across the Years
+
+```{r freq-casualties, fig.width=6}
+school_shootings %>%
+  ggplot(mapping = aes(x = year, y = casualties)) +
+  geom_point() +
+  labs(title = "Casualties over the years 1999 - 2018") +
+  ylab("Casualties") +
+  xlab("Year")
+```
+
+### Distribution of Casualties
+
+```{r dist-casualties, fig.width=5}
+school_shootings %>%
+  ggplot(mapping = aes(x = casualties)) +
+  geom_bar() +
+  labs(title = "Distribution of Casualties", subtitle = "School Shootings from 1999-2018") +
+  xlab("Casualties") +
+  ylab("Frequency")
+```
+
+### School Shootings by State
+
 Here is a visualization of school shootings per state in the U.S.
 
 ```{r testing, message=FALSE, warning=FALSE}
@@ -168,8 +133,7 @@ theme_map <- function(base_size = 12, base_family = "") {
         axis.title.x = element_blank(), axis.title.y = element_blank(), panel.background = element_blank(),
         panel.border = element_blank(), panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(), panel.margin = unit(0.1, "lines"),
-        plot.background = element_blank(), plot.margin = unit(c(0.25, 0.5, 0,
-            0), "lines"), axis.line = element_blank(), legend.background = element_blank(),
+        plot.background = element_blank(), plot.margin = unit(c(0, 0, 0, 0), "lines"), axis.line = element_blank(), legend.background = element_blank(),
         legend.margin = unit(0.1, "line"), legend.title = element_text(size = 14,
             colour = "black"), legend.text = element_text(size = 14, colour = "black",
             hjust = 0.2), legend.key = element_blank(), legend.key.width = unit(1.5,
@@ -196,6 +160,7 @@ us <- map_data("state")
 ggplot(school_shootings_state, aes(map_id = state)) + geom_map(aes(fill = Shootings), map = us) + 
     labs(title = "School Shooting Distribution in U.S.", fill = "Shootings") + expand_limits(x = us$long, y = us$lat) + 
     coord_map("polyconic") + theme_map() + scale_fill_gradient(low = "#FFCCCC", high = "#CB454A")
+```
 
 ### Multivariate Regression Analysis
 
@@ -311,7 +276,7 @@ Its adjusted r-squared value is 0.1699588.
 
 ### Conclusion
 
-Our analysis found that the best model included the variables ```enrollment``, ```shooting_type```, ```staffing```, ```lunch_percent``` and ```resource_officer```. 
+Our analysis found that the best model included the variables ```enrollment```, ```shooting_type```, ```staffing```, ```lunch_percent``` and ```resource_officer```. 
 
 ## Section 3. Discussion and Conclusion
 
