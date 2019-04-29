@@ -38,7 +38,7 @@ school_shootings <- read_csv("../data/school-shootings-data.csv")
 
 ### Hypothesis Test: Compare Mean of Casualties when Resource Officer is present/not present
 
-```{r resofficer-hyptest}
+```{r resofficer-hyptest, echo = FALSE}
 set.seed(7749)
 
 res_office <- school_shootings %>%
