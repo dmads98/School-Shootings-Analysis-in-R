@@ -12,6 +12,7 @@ knitr::opts_chunk$set(echo = FALSE)
 ```{r load-packages, message=FALSE}
 library(tidyverse)
 library(broom)
+library(lubridate)
 
 ```
 
@@ -34,6 +35,16 @@ school_shootings <- school_shootings %>%
 ```{r lunch-percent, echo=FALSE}
 school_shootings <- school_shootings %>%
   mutate(lunch_percent = lunch/enrollment)
+```
+
+```{r}
+school_shootings <- school_shootings %>%
+  mutate(time = hms::as.hms(time))
+
+#school_shootings <- school_shootings %>%
+#  mutate(time_day = case_when(
+#    time >= hms::as.hms(6:00:00) & time < hms::as.hms(12:00:00) ~ "morning"
+#  ))
 ```
 
 We create the following variables:
@@ -84,27 +95,6 @@ school_shootings %>%
   ylab("Frequency")
 ```
 
-### Popular Types of Shootings
-
-```{r pop-shoot-type, echo=FALSE}
-school_shootings %>%
-  group_by(shooting_type) %>%
-  count() %>%
-  arrange(desc(n))
-```
-Most of the shootings in our dataset were categorized as targeted.
-
-### Popular Days
-
-```{r pop-days, echo=FALSE}
-school_shootings %>%
-  group_by(day_of_week) %>%
-  count() %>%
-  arrange(desc(n))
-```
-
-There seems to be minimal difference in the number of shootings among days of the week, but Tuesday and Wednesday are the days with the most school shootings taking place. 
-
 ### Multivariate Regression Analysis
 
 These are the variables that we will include in our model:
@@ -136,7 +126,8 @@ school_shootings <- school_shootings %>%
          school_year, 
          year, 
          time, 
-         day_of_week, 
+         day_of_week,
+         lunch,
          city, 
          state, 
          school_type, 
@@ -167,21 +158,9 @@ school_shootings <- school_shootings %>%
 
 We first create a full model, which includes all potential variables. The ```step()``` function automates the backwards selection process for us.
 
-<center>
+```casualties ~ enrollment + factor(shooting_type) + staffing + white_percent + black_percent + hispanic_percent + asian_percent + lunch_percent + factor(resource_officer) + factor(day_of_week) + (enrollment * staffing) + (lunch_percent * factor(resource_officer))```
 
-```casualties ~ 
-              enrollment +
-              factor(shooting_type) +
-              staffing + 
-              white_percent + 
-              black_percent +
-              hispanic_percent +
-              asian_percent +
-              lunch_percent +
-              factor(resource_officer) +
-              factor(day_of_week)```
-              
-</center>
+### Backwards Selection
 
 ```{r back-sel, results='hide', echo=FALSE}
 mod_cas <- lm(casualties ~ 
@@ -194,7 +173,9 @@ mod_cas <- lm(casualties ~
               asian_percent +
               lunch_percent +
               factor(resource_officer) +
-              factor(day_of_week),
+              factor(day_of_week) +
+              (enrollment * staffing) +
+              (lunch_percent * factor(resource_officer)),
               data = school_shootings)
 
 #glance(mod_cas)$adj.r.squared
@@ -206,17 +187,12 @@ perf_model %>%
   select(term, estimate)
 
 glance(perf_model)$adj.r.squared
+
 ```
 
 The perfect model is shown below:
 
-```casualties ~ enrollment + factor(shooting_type) + staffing + 
-    lunch_percent + factor(resource_officer)```
+```casualties ~ enrollment + staffing + lunch_percent + factor(resource_officer) + enrollment:staffing + lunch_percent:factor(resource_officer) + factor(shooting_type)```
 
-Its adjusted r-squared value is 0.1699588.
+Its adjusted r-squared value is 0.1979681.
 
-### Testing of Model
-
-### Conclusion
-
-Our analysis found that the best model included the variables ```enrollment``, ```shooting_type```, ```staffing```, ```lunch_percent``` and ```resource_officer```. 
