@@ -1,4 +1,5 @@
 Exploratory Analysis of School Shootings
+================
 Significantly Different
 March 29, 2018
 
@@ -26,16 +27,24 @@ school. Despite such efforts, school shootings still break out, leading
 researchers and school officials to increasingly work more to figure out
 the best ways to prevent school shootings from occurring.
 
-The aim of the current project is to look into data of school shootings
-from the past to evaluate what factors correlate to higher number of
-casualties in school shootings, in hopes that this analysis will help
-lead to preventive measures.
+The primary focus of the current project is to look into the data of
+school shootings from the past to evaluate what factors correlate to
+higher number of casualties in school shootings, in hopes that this
+analysis will help lead to identification of good preventive measures.
+In addition, we will also be looking at whether our data is in line with
+a study (Vossekuil et al., 2002) that analyzed 37 school shooting which
+identified attackers as all male, 95% current student of the school, 81%
+single attackers and that 76% of attackers used one weapon with 61% (of
+all attackers) using handguns. As researchers claim that most firearms
+in school shootings were acquired from a family member (Vossekuil et
+al., 2002; Levin & Madfis, 2009), this analysis will also explore
+whether such findings apply to the data we have.
 
 Throughout this project, our team will look into the
 `schools-shootings-data.csv` as provided by the Washington Post. The
 data consists of any act of gunfire at schools (primary, secondary) that
 occurred during school hours, or immediately before or after hours,
-since the Columbine High massacre on April 20, 1999. As such, 221
+since the Columbine High massacre on April 20, 1999. As such, 238
 incidences of school shootings have been included in the dataset. The
 data was collected by using “Nexis, news articles, open-source
 databases, law enforcement reports, information from school websites,
@@ -193,3 +202,59 @@ Its adjusted r-squared value is 0.1699588.
 
 Our analysis found that the best model included the variables
 `enrollment``,`shooting\_type`,`staffing`,`lunch\_percent`and`resource\_officer\`\`\`.
+
+## Section 3. Discussion and Conclusion
+
+Through this exploratory analysis, we identified some variables that
+correlate to a higher number of casualties for school shootings: the
+number of full time teachers at time of shooting (`staffing`),
+enrollment at school at time of shooting (`enrollment`), number of
+students eligible for free or reduced price lunch (`lunch`), type of
+shooting (`shooting_type`), and presence of resource officer or security
+guard at time of shooting (`resource_officer`). As correlation does not
+imply causation, we would not go as far as to say that these were the
+factors that caused more victims (e.g. the absence of a resource officer
+may not have directly caused higher number of casualties). Also, with an
+adjusted r-squared value of 0.169, only about 17% of variability in
+number of casualties can be explained by these 5 variables.
+
+Some possible explanations as to why the 5 variables were best
+predictors of number of casualties is as follows: the more full time
+teachers there were at the time of shooting, the more possible it would
+have been for teachers to collectively protect the students and follow
+emergency guidelines; more students being enrolled on school would lead
+to more potential victims; and indiscriminate shooting would have lead
+to more casualties than targeted shooting. The resource officer being
+present being correlated to more number of casualties is interesting and
+difficult to explain. Perhaps the officer being present may have somehow
+either triggered the students to commit more shootings out of fear,
+maybe the fact that the school had an officer was indicative of the
+school experiencing trouble with violence, or as indicated in the
+literature (Addington, 2009), having security measures in school may
+have lead to the school feeling like prison for the students, causing
+more emotional distress and resentment. The `lunch` variable is also
+interesting in that it shows how schools with a greater proportion of
+students receiving free lunch have fewer number of casualties during
+shootings. Although it is hard to explain why this is the case from the
+given data, one possibility is that these schools had better preventive
+measures established prior to the shooting occurrence.
+
+A few limitations exist in this analysis. There were several variables
+and data that would have been interesting to look at to provide a fuller
+understanding of our analysis such as “rate of reported bullying”, as
+the literature suggests bullying as one of the main causes of school
+shootings. Although the `lunch` variable is indicative of the SES status
+of the students in the school, an “average/median family income” would
+have helped better explain the significance of this variable. Finally,
+because we didn’t have any data for schools that don’t have shootings,
+we were not able to analyze and assess how schools that experienced
+shootings were different from those that did not. More information on
+what type of preventive measures were in schools prior to the shooting
+would have also been interesting to see how effective these measures are
+(for our current data, we only have the variable `resource_officer` for
+this). If we were able to start over with the project, we would have
+addressed the aforementioned issues with the data. In terms of
+statistical analysis, although we looked at the number of casualties in
+a numerical perspective, we could have looked at it in a categorical way
+by comparing schools that had shootings with no casualties to schools
+that had shootings with one or more casualties.
