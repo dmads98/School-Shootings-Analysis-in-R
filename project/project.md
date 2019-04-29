@@ -66,6 +66,48 @@ lunch, county, state\_fips, county\_fips, ulocale
 More information on the description of these variables can be found
 under the codebook in the `data` folder.
 
+In addition, we will also be looking at whether our data is in line with
+a study (Vossekuil et al., 2002) that analyzed 37 school shooting which
+identified attackers as all male, 95% current student of the school, 81%
+single attackers and that 76% of attackers used one weapon with 61% (of
+all attackers) using handguns. As researchers claim that most firearms
+in school shootings were acquired from a family member (Vossekuil et
+al., 2002; Levin & Madfis, 2009), this analysis will also explore
+whether such findings apply to the data we have.
+
+### In Line with Previous Literature?
+
+    ## # A tibble: 3 x 4
+    ##   gender_shooter1 gender_shooter2     n percentage
+    ##   <chr>           <chr>           <int>      <dbl>
+    ## 1 f               <NA>               10       4.50
+    ## 2 m               m                   5       2.25
+    ## 3 m               <NA>              207      93.2
+
+    ## # A tibble: 33 x 2
+    ##    shooter_relationship1                    n
+    ##    <chr>                                <int>
+    ##  1 boyfriend of student                     1
+    ##  2 brother of student                       1
+    ##  3 dating mother of student                 1
+    ##  4 ex-boyfriend of student                  1
+    ##  5 father of football player                1
+    ##  6 father of student                        1
+    ##  7 fired teacher                            1
+    ##  8 former boyfriend of student              1
+    ##  9 former boyfriend of student's mother     1
+    ## 10 former student                           7
+    ## # … with 23 more rows
+
+Unlike the analysis presented in the study of Vossekuil et al. (2002)
+that indicated all attackers as male, our data shows that 4.5% of the
+first shooter were female, although there were no second shooters that
+were female. Out of 222 observations where enough information was given
+about the shooters, only 5 shootings had 2 shooters involved–which is
+only 2.25%, leaving 97.75% of the attacks as being committed by single
+attackers. This is a much bigger number compared to the 81% Vossekuil et
+al. reported in their study.
+
 ### Mutation of Variables
 
 We begin by manipulating some of our variables in order to make them
@@ -235,13 +277,16 @@ shootings. Although it is hard to explain why this is the case from the
 given data, one possibility is that these schools had better preventive
 measures established prior to the shooting occurrence.
 
-A few limitations exist in this analysis. There were several variables
-and data that would have been interesting to look at to provide a fuller
-understanding of our analysis such as “rate of reported bullying”, as
-the literature suggests bullying as one of the main causes of school
-shootings. Although the `lunch` variable is indicative of the SES status
-of the students in the school, an “average/median family income” would
-have helped better explain the significance of this variable. Finally,
+A few limitations exist in this analysis. First, our data may have
+potentially been unreliable, as it got information from that available
+to the public–at times, the gender or age of the shooters wasn’t
+reported, for example. Also, there were several variables and data that
+would have been interesting to look at to provide a fuller understanding
+of our analysis such as “rate of reported bullying”, as the literature
+suggests bullying as one of the main causes of school shootings.
+Although the `lunch` variable is indicative of the SES status of the
+students in the school, an “average/median family income” would have
+helped better explain the significance of this variable. Finally,
 because we didn’t have any data for schools that don’t have shootings,
 we were not able to analyze and assess how schools that experienced
 shootings were different from those that did not. More information on
@@ -254,14 +299,3 @@ statistical analysis, although we looked at the number of casualties in
 a numerical perspective, we could have looked at it in a categorical way
 by comparing schools that had shootings with no casualties to schools
 that had shootings with one or more casualties.
-
-Your write up must also include a one to two page conclusion and
-discussion. This will require a summary of what you have learned about
-your research question along with statistical arguments supporting your
-conclusions. Also critique your own methods and provide suggestions for
-improving your analysis. Issues pertaining to the reliability and
-validity of your data and appropriateness of the statistical analysis
-should also be discussed here. A paragraph on what you would do
-differently if you were able to start over with the project or what you
-would do next if you were going to continue work on the project should
-also be included.
