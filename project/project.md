@@ -44,7 +44,7 @@ Throughout this project, our team will look into the
 `schools-shootings-data.csv` as provided by the Washington Post. The
 data consists of any act of gunfire at schools (primary, secondary) that
 occurred during school hours, or immediately before or after hours,
-since the Columbine High massacre on April 20, 1999. As such, 221
+since the Columbine High massacre on April 20, 1999. As such, 238
 incidences of school shootings have been included in the dataset. The
 data was collected by using “Nexis, news articles, open-source
 databases, law enforcement reports, information from school websites,
@@ -68,18 +68,78 @@ under the codebook in the `data` folder.
 
 ## Section 2. Data Analysis
 
-In addition, we will also be looking at whether our data is in line with
-a study (Vossekuil et al., 2002) that analyzed 37 school shooting which
-identified attackers as all male, 95% current student of the school, 81%
-single attackers and that 76% of attackers used one weapon with 61% (of
-all attackers) using handguns. As researchers claim that most firearms
-in school shootings were acquired from a family member (Vossekuil et
-al., 2002; Levin & Madfis, 2009), this analysis will also explore
-whether this finding apply to the data we have.
+95% current student of the school, 81% single attackers and that 76% of
+attackers used one weapon with 61% (of all attackers) using handguns. As
+researchers claim that most firearms in school shootings were acquired
+from a family member (Vossekuil et al., 2002; Levin & Madfis, 2009),
+this analysis will also explore whether this finding apply to the data
+we have.
 
 ### Claims made by Previous Literature
 
 ##### Vossekuil’s Analysis of 37 School Shootings
+
+    ## # A tibble: 3 x 4
+    ##   gender_shooter1 gender_shooter2     n percentage
+    ##   <chr>           <chr>           <int>      <dbl>
+    ## 1 f               <NA>               10       4.50
+    ## 2 m               m                   5       2.25
+    ## 3 m               <NA>              207      93.2
+
+    ## # A tibble: 32 x 3
+    ##    shooter_relationship1                    n percentage
+    ##    <chr>                                <int>      <dbl>
+    ##  1 boyfriend of student                     1      0.532
+    ##  2 brother of student                       1      0.532
+    ##  3 dating mother of student                 1      0.532
+    ##  4 ex-boyfriend of student                  1      0.532
+    ##  5 father of football player                1      0.532
+    ##  6 father of student                        1      0.532
+    ##  7 fired teacher                            1      0.532
+    ##  8 former boyfriend of student              1      0.532
+    ##  9 former boyfriend of student's mother     1      0.532
+    ## 10 former student                           7      3.72 
+    ## # … with 22 more rows
+
+    ## # A tibble: 4 x 3
+    ##   weapon       n percentage
+    ##   <chr>    <int>      <dbl>
+    ## 1 handgun    138      71.5 
+    ## 2 revolver    23      11.9 
+    ## 3 rifle       19       9.84
+    ## 4 shotgun     13       6.74
+
+Of the 222 shootings where the shooter’s gender is identified, we find
+that unlike Vossekuil’s findings, 4.5% of the 238 shootings were
+committed by female shooters. Still, 93.24% of the overall shootings
+were commited by single male shooters, and 2.25% of the shootings were
+committed by two male shooters. With a greater sample size, it seems
+like we see an increased proportion of single attackers and a few
+observations of female
+shooters.
+
+### Are most firearms in school shootings acquired from a family member? (Vossekuil et al., 2002; Levin & Madfis, 2009)
+
+    ## # A tibble: 2 x 2
+    ##   source_weapons     n
+    ##   <chr>          <int>
+    ## 1 family            50
+    ## 2 <NA>             188
+
+    ## # A tibble: 43 x 2
+    ##    weapon_source                                                      n
+    ##    <chr>                                                          <int>
+    ##  1 acquaintence of shooter                                            1
+    ##  2 brother                                                            1
+    ##  3 classmate, who took from parents                                   1
+    ##  4 contructed from parts legally purchased by shooter                 1
+    ##  5 department issued                                                  9
+    ##  6 family home                                                        1
+    ##  7 family member                                                      2
+    ##  8 father                                                            17
+    ##  9 father's gun, kept by 17 year old who shared room with shooter     1
+    ## 10 friend's home                                                      2
+    ## # … with 33 more rows
 
 ### Frequency of Annual School Shootings
 
@@ -178,12 +238,22 @@ Variables:
 ## Section 3. Discussion and Conclusion
 
 Through this exploratory analysis, we identified some factors that
-correlate to a higher number of casualties for school shootings:
-`staffing`, `enrollment`, `lunch`, `resource_officer`. As correlation
-does not imply causation, we would not go as far as to say that these
-were the factors that caused more victims (e.g. the absence of a
-resource officer may not have caused higher number of casualties, but it
-makes s to be related with the number).
+correlate to a higher number of casualties for school shootings: the
+number of full time teachers at time of shooting (`staffing`),
+enrollment at school at time of shooting (`enrollment`), number of
+students eligible for free or reduced price lunch (`lunch`), and
+presence of resource officer or security guard at time of shooting
+(`resource_officer`). As correlation does not imply causation, we would
+not go as far as to say that these were the factors that caused more
+victims (e.g. the absence of a resource officer may not have directly
+caused higher number of casualties). However, the variables included in
+the final model of the regression analysis seem to make sense: the more
+full time teachers there were at the time of shooting, the more likely
+it would have been possible for teachers to try and protect the students
+and follow emergency guidelines, the more students there were at the
+time of shooting, the more likely , . The `lunch` variable is
+interesting in that it shows how schools of lower socioeconomic status
+may be
 
 Your write up must also include a one to two page conclusion and
 discussion. This will require a summary of what you have learned about

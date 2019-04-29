@@ -11,7 +11,7 @@ Gun control has been an issue of huge debate in the United States: from individu
 
 The primary focus of the current project is to look into the data of school shootings from the past to evaluate what factors correlate to higher number of casualties in school shootings, in hopes that this analysis will help lead to identification of good preventive measures. In addition, we will also be looking at whether our data is in line with a study (Vossekuil et al., 2002) that analyzed 37 school shooting which identified attackers as all male, 95% current student of the school, 81% single attackers and that 76% of attackers used one weapon with 61% (of all attackers) using handguns. As researchers claim that most firearms in school shootings were acquired from a family member (Vossekuil et al., 2002; Levin & Madfis, 2009), this analysis will also explore whether such findings apply to the data we have. 
 
-Throughout this project, our team will look into the ```schools-shootings-data.csv``` as provided by the Washington Post. The data consists of any act of gunfire at schools (primary, secondary) that occurred during school hours, or immediately before or after hours, since the Columbine High massacre on April 20, 1999. As such, 221 incidences of school shootings have been included in the dataset. The data was collected by using “Nexis, news articles, open-source databases, law enforcement reports, information from school websites, and calls to schools and police departments”, as according to Washington Post. The variables included in this data are as follows: 
+Throughout this project, our team will look into the ```schools-shootings-data.csv``` as provided by the Washington Post. The data consists of any act of gunfire at schools (primary, secondary) that occurred during school hours, or immediately before or after hours, since the Columbine High massacre on April 20, 1999. As such, 238 incidences of school shootings have been included in the dataset. The data was collected by using “Nexis, news articles, open-source databases, law enforcement reports, information from school websites, and calls to schools and police departments”, as according to Washington Post. The variables included in this data are as follows: 
 
 uid, nces_school_id, school_name, nces_district_id, district_name, date, school_year, year, time, day_of_week, city, state, school_type, enrollment, killed, injured, casualties, shooting_type, age_shooter1, gender_shooter1, race_ethnicity_shooter1, shooter_relationship1, shooter_deceased1, deceased_notes1, age_shooter2, gender_shooter2, race_ethnicity_shooter2, shooter_relationship2, shooter_deceased2, deceased_notes2, white, black, Hispanic, Asian, American_indian_alaska_native, Hawaiian_native_pacific_islander, two_or_more, resource_officer, weapon, weapon_source, lat, long, staffing, low_grade, high_grade, lunch, county, state_fips, county_fips, ulocale
 
@@ -30,17 +30,95 @@ library(tidyverse)
 
 ```{r load-data, message=FALSE}
 school_shootings <- read_csv("../data/school-shootings-data.csv")
+view(school_shootings)
 ```
 
-In addition, we will also be looking at whether our data is in line with a study (Vossekuil et al., 2002) that analyzed 37 school shooting which identified attackers as all male, 95% current student of the school, 81% single attackers and that 76% of attackers used one weapon with 61% (of all attackers) using handguns. As researchers claim that most firearms in school shootings were acquired from a family member (Vossekuil et al., 2002; Levin & Madfis, 2009), this analysis will also explore whether this finding apply to the data we have. 
+ 95% current student of the school, 81% single attackers and that 76% of attackers used one weapon with 61% (of all attackers) using handguns. As researchers claim that most firearms in school shootings were acquired from a family member (Vossekuil et al., 2002; Levin & Madfis, 2009), this analysis will also explore whether this finding apply to the data we have. 
 
 ### Claims made by Previous Literature
 
 ##### Vossekuil's Analysis of 37 School Shootings
 ```{r vossekuil}
 shootings_literature <- school_shootings %>%
-  select(gender_shooter1, gender_shooter2, shooter_relationship1, shooter_relationship2, weapon, weapon_source)
+  mutate(gender_shooter1 = case_when(
+    str_detect(gender_shooter1, "b") ~ "m",
+    str_detect(gender_shooter1, "m") ~ "m",
+    str_detect(gender_shooter1, "f") ~ "f"
+  ))
 
+shootings_literature %>%
+  select(gender_shooter1, gender_shooter2) %>%
+  filter(gender_shooter1 != "NA") %>%
+  count(gender_shooter1, gender_shooter2) %>%
+  mutate(percentage = n/sum(n) * 100)
+
+shootings_relationship <- shootings_literature %>%
+  mutate(relationship = case_when(
+    str_detect(shooter_relationship1, "boyfriend of student") ~ "related to student",
+    str_detect(shooter_relationship1, "of student") ~ "related to student",
+    str_detect(shooter_relationship1, "of student") ~ "related to student",
+    str_detect(shooter_relationship1, "of student") ~ "related to student",
+    str_detect(shooter_relationship1, "teacher") ~ "official",
+    str_detect(shooter_relationship1, "officer") ~ "official",
+    str_detect(shooter_relationship1, "none") ~ "unrelated"
+  ))
+
+shootings_relationship %>%
+  select(shooter_relationship1, shooter_relationship2) %>%
+  filter(shooter_relationship1 != "NA") %>%
+  count(shooter_relationship1) %>%
+  mutate(percentage = n/sum(n) * 100)
+
+shootings_weapon <- shootings_literature %>%
+  mutate(weapon = case_when(
+    str_detect(weapon, "revolver") ~ "revolver",
+    str_detect(weapon, "handgun") ~ "handgun",
+    str_detect(weapon, "rifle") ~ "rifle",
+    str_detect(weapon, "shotgun") ~ "shotgun",
+    str_detect(weapon, "handguns") ~ "handgun"
+  ))
+
+shootings_weapon %>%
+  select(weapon) %>%
+  filter(weapon != "NA") %>%
+  count(weapon) %>%
+  mutate(percentage = n/sum(n) * 100)
+```
+
+Of the 222 shootings where the shooter's gender is identified, we find that unlike Vossekuil's findings, 4.5% of the 238 shootings were committed by female shooters. Still, 93.24% of the overall shootings were commited by single male shooters, and 2.25% of the shootings were committed by two male shooters. With a greater sample size, it seems like we see an increased proportion of single attackers and a few observations of female shooters. 
+
+### Are most firearms in school shootings acquired from a family member? (Vossekuil et al., 2002; Levin & Madfis, 2009)
+
+```{r firearm-source}
+source <- school_shootings %>%
+  mutate(source_weapons = case_when(
+    str_detect(weapon_source, "mother") ~ "family",
+    str_detect(weapon_source, "mother's") ~ "family",
+    str_detect(weapon_source, "parent") ~ "family",
+    str_detect(weapon_source, "older brother") ~ "family",
+    str_detect(weapon_source, "brother") ~ "family",
+    str_detect(weapon_source, "parents") ~ "family",
+    str_detect(weapon_source, "gift from grandparents") ~ "family",
+    str_detect(weapon_source, "grandfather") ~ "family",
+    str_detect(weapon_source, "grandparents") ~ "family",
+    str_detect(weapon_source, "guardian (uncle)") ~ "family",
+    str_detect(weapon_source, "family") ~ "family",
+    str_detect(weapon_source, "home") ~ "family",
+    str_detect(weapon_source, "father") ~ "family",
+    str_detect(weapon_source, "father's") ~ "family",
+    str_detect(weapon_source, "parent") ~ "family",
+    str_detect(weapon_source, "relative") ~ "family",
+    str_detect(weapon_source, "relatives") ~ "family",
+    str_detect(weapon_source, "stepfather") ~ "family",
+    str_detect(weapon_source, "uncle") ~ "family",
+    str_detect(weapon_source, "uncle's friend") ~ "family",
+  ))
+
+source %>%
+  count(source_weapons)
+
+school_shootings %>%
+  count(weapon_source)
 ```
 
 ### Frequency of Annual School Shootings
@@ -135,9 +213,11 @@ mod_cas <- lm(casualties ~ day_of_week + black_percent + white_percent, data = s
 mod_cas
 ```
 
+
+
 ## Section 3. Discussion and Conclusion
 
-Through this exploratory analysis, we identified some factors that correlate to a higher number of casualties for school shootings: ```staffing```, ```enrollment```, ```lunch```, ```resource_officer```. As correlation does not imply causation, we would not go as far as to say that these were the factors that caused more victims (e.g. the absence of a resource officer may not have caused higher number of casualties, but it makes s to be related with the number). 
+Through this exploratory analysis, we identified some factors that correlate to a higher number of casualties for school shootings: the number of full time teachers at time of shooting (```staffing```), enrollment at school at time of shooting (```enrollment```), number of students eligible for free or reduced price lunch (```lunch```), and presence of resource officer or security guard at time of shooting (```resource_officer```). As correlation does not imply causation, we would not go as far as to say that these were the factors that caused more victims (e.g. the absence of a resource officer may not have directly caused higher number of casualties). However, the variables included in the final model of the regression analysis seem to make sense: the more full time teachers there were at the time of shooting, the more likely it would have been possible for teachers to try and protect the students and follow emergency guidelines, the more students there were at the time of shooting, the more likely , . The ```lunch``` variable is interesting in that it shows how schools of lower socioeconomic status may be 
 
 
 Your write up must also include a one to two page conclusion and discussion. This will require a summary of what you have learned about your research question along with statistical arguments supporting your conclusions. Also critique your own methods and provide suggestions for improving your analysis. Issues pertaining to the reliability and validity of your data and appropriateness of the statistical analysis should also be discussed here. A paragraph on what you would do differently if you were able to start over with the project or what you would do next if you were going to continue work on the project should also be included.
