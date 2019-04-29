@@ -373,7 +373,8 @@ glance(perf_model)$adj.r.squared
 
 The perfect model is shown below:
 
-```casualties ~ enrollment + staffing + lunch_percent + factor(resource_officer) + factor(shooting_type)```
+```casualties ~ enrollment + factor(shooting_type) + staffing + 
+    lunch_percent + factor(resource_officer) + american_indian_alaska_native_percent```
 
 Its adjusted r-squared value is 0.1783479.
 
