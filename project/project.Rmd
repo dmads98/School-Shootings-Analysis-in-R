@@ -26,6 +26,7 @@ knitr::opts_chunk$set(echo = FALSE)
 ```{r load-packages, message=FALSE}
 library(tidyverse)
 library(broom)
+library(lubridate)
 ```
 
 ```{r load-data, message=FALSE}
@@ -344,11 +345,55 @@ The perfect model is shown below:
 
 Its adjusted r-squared value is 0.1699588.
 
-### Testing of Model
+### Hypothesis Testing
 
-### Conclusion
+We will perform a hypothesis test on the amount of school shootings during the fall versus the spring semester of the school year. In order to do this, we must define a new variable called ```semester``` with two values, ```spring``` and ```summer```. 
 
-Our analysis found that the best model included the variables ```enrollment```, ```shooting_type```, ```staffing```, ```lunch_percent``` and ```resource_officer```. 
+Spring is defined as the months of January through May, when most schools are in session and fall is defined as the months of August through December, when most schools are in session as well. 
+
+```{r}
+school_shootings <- school_shootings %>%
+  mutate(date = as.Date(date, "%m/%d/%y"))
+
+school_shootings <- school_shootings %>%
+  mutate(month = lubridate::month(date))
+
+school_shootings <- school_shootings %>%
+  mutate(semester = case_when(
+    month >= 1 & month <= 6 ~ "spring",
+    month >= 8 & month <= 12 ~ "fall"
+  ))
+
+school_shootings %>%
+  group_by(semester) %>%
+  count() %>%
+  mutate(spm = n/5)
+
+```
+
+
+There seems to be an obvious difference between the amount of school shootings, with the spring semester having an average amount of 28.2 shootings per month. We will perform a hypothesis test on this difference and whether it's significant. 
+
+p1 = average # of shootings per month during the fall
+p2 = average # of shootings per month during the spring
+
+Our hypotheses:
+
+H0: the difference is not significant; p1 = p2
+HA: the difference is significant; p1 != p2
+
+```{r}
+null_dist <- school_shootings %>%
+  specify(response = outcome, success = "complication") %>% 
+  hypothesize(null = "point",
+              p = c("complication" = 0.10, "no complication" = 0.90)
+              ) %>%
+  generate(reps = 100, type = "simulate") %>% 
+  calculate(stat = "prop")
+```
+
+
+
 
 ## Section 3. Discussion and Conclusion
 
