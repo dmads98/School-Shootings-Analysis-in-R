@@ -325,6 +325,15 @@ These are the variables that we will include in our model:
 ```lunch_percent```
 ```factor(resource_officer)```
 ```factor(day_of_week)```
+``` state```
+```school_type```
+```age_shooter1```
+```gender_shooter1``` 
+```race_ethnicity_shooter1```
+```shooter_relationship1```
+```shooter_deceased1```
+```american_indian_alaska_native_percent```
+```locale_type```
 
 </center>
 
