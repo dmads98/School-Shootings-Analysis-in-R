@@ -111,7 +111,7 @@ Most of the shootings in our dataset were categorized as targeted.
 
 ### Popular Days
 
-```{r pop-days, echo=FALSE}
+```{r pop-days, echo= FALSE}
 school_shootings %>%
   group_by(day_of_week) %>%
   count() %>%
