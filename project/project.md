@@ -63,7 +63,33 @@ weapon, weapon\_source, lat, long, staffing, low\_grade, high\_grade,
 lunch, county, state\_fips, county\_fips, ulocale
 
 More information on the description of these variables can be found
-under the codebook in the `data` folder.
+under the codebook in the `data`
+folder.
+
+### Hypothesis Test: Compare Mean of Casualties when Resource Officer is present/not present
+
+![](project_files/figure-gfm/resofficer-hyptest-1.png)<!-- -->
+
+    ## # A tibble: 1 x 2
+    ##   lower_bound upper_bound
+    ##         <dbl>       <dbl>
+    ## 1       -1.04        1.12
+
+    ## # A tibble: 1 x 1
+    ##   p_value
+    ##     <dbl>
+    ## 1   0.006
+
+In this scenario, the null hypothesis is that there is no difference in
+mean number casualties of school shootings that occured when there is a
+officer present vs. when there isn’t. The alternative hypothesis is that
+there is a difference in mean number of casualties of school shootings
+when there is an officer present vs. when there isn’t.
+
+The 95% confidence interval shows that we are 95% confident that the
+difference in mean casualties of school shootings that occured when
+resource officers were present vs. when they weren’t is between -1.035
+dollars and 1.12.
 
 ## Section 2. Data Analysis
 
@@ -276,15 +302,16 @@ given data, one possibility is that these schools had better preventive
 measures established prior to the shooting occurrence.
 
 A few limitations exist in this analysis. First, our data may have
-potentially been unreliable, as it got information from that available
-to the public–at times, the gender or age of the shooters wasn’t
-reported, for example. Also, there were several variables and data that
-would have been interesting to look at to provide a fuller understanding
-of our analysis such as “rate of reported bullying”, as the literature
-suggests bullying as one of the main causes of school shootings.
-Although the `lunch` variable is indicative of the SES status of the
-students in the school, an “average/median family income” would have
-helped better explain the significance of this variable. Finally,
+potentially been unreliable, as it got information from only that
+available to the public–at times, the gender or age of the shooters
+wasn’t reported, for example, and there were a lot of missing
+information on the shooter’s profile. Also, there were several variables
+and data that would have been interesting to look at to provide a fuller
+understanding of our analysis such as “rate of reported bullying”, as
+the literature suggests bullying as one of the main causes of school
+shootings. Although the `lunch` variable is indicative of the SES status
+of the students in the school, an “average/median family income” would
+have helped better explain the significance of this variable. Finally,
 because we didn’t have any data for schools that don’t have shootings,
 we were not able to analyze and assess how schools that experienced
 shootings were different from those that did not. More information on
