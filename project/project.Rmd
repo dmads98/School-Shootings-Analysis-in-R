@@ -17,113 +17,52 @@ uid, nces_school_id, school_name, nces_district_id, district_name, date, school_
 
 More information on the description of these variables can be found under the codebook in the ```data``` folder. 
 
-## Section 2. Data Analysis
-
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
 ```{r load-packages, message=FALSE}
 library(tidyverse)
+library(broom)
+
 ```
 
 ```{r load-data, message=FALSE}
 school_shootings <- read_csv("../data/school-shootings-data.csv")
-view(school_shootings)
 ```
 
- 95% current student of the school, 81% single attackers and that 76% of attackers used one weapon with 61% (of all attackers) using handguns. As researchers claim that most firearms in school shootings were acquired from a family member (Vossekuil et al., 2002; Levin & Madfis, 2009), this analysis will also explore whether this finding apply to the data we have. 
+### Mutation of Variables
 
-### Claims made by Previous Literature
+We begin by manipulating some of our variables in order to make them more useful. For example, many of our variables are raw and thus, converting them to percentages will be more useful and standardized. 
 
-##### Vossekuil's Analysis of 37 School Shootings
-```{r vossekuil}
-shootings_literature <- school_shootings %>%
-  mutate(gender_shooter1 = case_when(
-    str_detect(gender_shooter1, "b") ~ "m",
-    str_detect(gender_shooter1, "m") ~ "m",
-    str_detect(gender_shooter1, "f") ~ "f"
-  ))
-
-shootings_literature %>%
-  select(gender_shooter1, gender_shooter2) %>%
-  filter(gender_shooter1 != "NA") %>%
-  count(gender_shooter1, gender_shooter2) %>%
-  mutate(percentage = n/sum(n) * 100)
-
-shootings_relationship <- shootings_literature %>%
-  mutate(relationship = case_when(
-    str_detect(shooter_relationship1, "boyfriend of student") ~ "related to student",
-    str_detect(shooter_relationship1, "of student") ~ "related to student",
-    str_detect(shooter_relationship1, "of student") ~ "related to student",
-    str_detect(shooter_relationship1, "of student") ~ "related to student",
-    str_detect(shooter_relationship1, "teacher") ~ "official",
-    str_detect(shooter_relationship1, "officer") ~ "official",
-    str_detect(shooter_relationship1, "none") ~ "unrelated"
-  ))
-
-shootings_relationship %>%
-  select(shooter_relationship1, shooter_relationship2) %>%
-  filter(shooter_relationship1 != "NA") %>%
-  count(shooter_relationship1) %>%
-  mutate(percentage = n/sum(n) * 100)
-
-shootings_weapon <- shootings_literature %>%
-  mutate(weapon = case_when(
-    str_detect(weapon, "revolver") ~ "revolver",
-    str_detect(weapon, "handgun") ~ "handgun",
-    str_detect(weapon, "rifle") ~ "rifle",
-    str_detect(weapon, "shotgun") ~ "shotgun",
-    str_detect(weapon, "handguns") ~ "handgun"
-  ))
-
-shootings_weapon %>%
-  select(weapon) %>%
-  filter(weapon != "NA") %>%
-  count(weapon) %>%
-  mutate(percentage = n/sum(n) * 100)
+```{r mutation-races, echo=FALSE}
+school_shootings <- school_shootings %>%
+  mutate(white_percent = white/enrollment,
+         black_percent = black/enrollment,
+         hispanic_percent = hispanic/enrollment,
+         asian_percent = asian/enrollment)
 ```
 
-Of the 222 shootings where the shooter's gender is identified, we find that unlike Vossekuil's findings, 4.5% of the 238 shootings were committed by female shooters. Still, 93.24% of the overall shootings were commited by single male shooters, and 2.25% of the shootings were committed by two male shooters. With a greater sample size, it seems like we see an increased proportion of single attackers and a few observations of female shooters. 
-
-### Are most firearms in school shootings acquired from a family member? (Vossekuil et al., 2002; Levin & Madfis, 2009)
-
-```{r firearm-source}
-source <- school_shootings %>%
-  mutate(source_weapons = case_when(
-    str_detect(weapon_source, "mother") ~ "family",
-    str_detect(weapon_source, "mother's") ~ "family",
-    str_detect(weapon_source, "parent") ~ "family",
-    str_detect(weapon_source, "older brother") ~ "family",
-    str_detect(weapon_source, "brother") ~ "family",
-    str_detect(weapon_source, "parents") ~ "family",
-    str_detect(weapon_source, "gift from grandparents") ~ "family",
-    str_detect(weapon_source, "grandfather") ~ "family",
-    str_detect(weapon_source, "grandparents") ~ "family",
-    str_detect(weapon_source, "guardian (uncle)") ~ "family",
-    str_detect(weapon_source, "family") ~ "family",
-    str_detect(weapon_source, "home") ~ "family",
-    str_detect(weapon_source, "father") ~ "family",
-    str_detect(weapon_source, "father's") ~ "family",
-    str_detect(weapon_source, "parent") ~ "family",
-    str_detect(weapon_source, "relative") ~ "family",
-    str_detect(weapon_source, "relatives") ~ "family",
-    str_detect(weapon_source, "stepfather") ~ "family",
-    str_detect(weapon_source, "uncle") ~ "family",
-    str_detect(weapon_source, "uncle's friend") ~ "family",
-  ))
-
-source %>%
-  count(source_weapons)
-
-school_shootings %>%
-  count(weapon_source)
+```{r lunch-percent, echo=FALSE}
+school_shootings <- school_shootings %>%
+  mutate(lunch_percent = lunch/enrollment)
 ```
+
+We create the following variables:
+
+<center>
+
+```white_percent```
+```black_percent```
+```hispanic_percent```
+```asian_percent```
+```lunch_percent```
+
+</center>
 
 ### Frequency of Annual School Shootings
 
-```{r quan-shootings, fig.width=5}
+```{r quan-shootings, fig.width=5, echo=FALSE}
 school_shootings %>%
   group_by(year) %>%
   count() %>%
@@ -132,11 +71,12 @@ school_shootings %>%
   labs(title = "Number of annual school shootings", subtitle = "1999 - 2018") +
   ylab("Frequency") +
   xlab("Year")
+
 ```
 
 ### Number of Casualties Across the Years
 
-```{r freq-casualties, fig.width=6}
+```{r freq-casualties, fig.width=6, echo=FALSE}
 school_shootings %>%
   ggplot(mapping = aes(x = year, y = casualties)) +
   geom_point() +
@@ -147,7 +87,7 @@ school_shootings %>%
 
 ### Distribution of Casualties
 
-```{r dist-casualties, fig.width=5}
+```{r dist-casualties, fig.width=5, echo=FALSE}
 school_shootings %>%
   ggplot(mapping = aes(x = casualties)) +
   geom_bar() +
@@ -158,7 +98,7 @@ school_shootings %>%
 
 ### Popular Types of Shootings
 
-```{r}
+```{r pop-shoot-type, echo=FALSE}
 school_shootings %>%
   group_by(shooting_type) %>%
   count() %>%
@@ -167,63 +107,140 @@ school_shootings %>%
 Most of the shootings in our dataset were categorized as targeted.
 
 ### Popular Days
-```{r}
+
+```{r pop-days, echo=FALSE}
 school_shootings %>%
   group_by(day_of_week) %>%
   count() %>%
   arrange(desc(n))
 ```
+
 There seems to be minimal difference in the number of shootings among days of the week, but Tuesday and Wednesday are the days with the most school shootings taking place. 
-
-### Mutation of Variables
-
-We wanted to manipulate some of our variables in order to make them more useful. For example, many of our variables are raw and thus, converting them to percentages will be more useful and standardized. 
-
-```{r mutation-races}
-school_shootings <- school_shootings %>%
-  mutate(white_percent = white/enrollment,
-         black_percent = black/enrollment,
-         hispanic_percent = hispanic/enrollment,
-         asian_percent = asian/enrollment)
-```
-
-```{r lunch-percent}
-school_shootings <- school_shootings %>%
-  mutate(lunch_percent = lunch/enrollment)
-```
 
 ### Multivariate Regression Analysis
 
-These are the variables that we will include in our model. We will then use model selection in order to find the most appropriate model to perform predictions. 
+These are the variables that we will include in our model:
 
-Variables:
+<center>
 
-```day_of_week```
-```black_percent```
+```enrollment``` 
+```factor(shooting_type)```
+```staffing```
 ```white_percent```
+```black_percent```
 ```hispanic_percent```
 ```asian_percent```
-```enrollment```
 ```lunch_percent```
-```shooting_type```
+```factor(resource_officer)```
+```factor(day_of_week)```
 
-```{r casulatiesregress}
-mod_cas <- lm(casualties ~ day_of_week + black_percent + white_percent, data = school_shootings)
+</center>
 
-mod_cas
+### Model Creation and Backwards Selection
+
+First, we eliminate variables that will not be useful in our model, such as those used for logistical purposes. 
+
+```{r sel-vars, echo=FALSE}
+school_shootings <- school_shootings %>%
+  select(school_name, 
+         district_name, 
+         date, 
+         school_year, 
+         year, 
+         time, 
+         day_of_week, 
+         city, 
+         state, 
+         school_type, 
+         enrollment, 
+         killed, 
+         injured, 
+         casualties, 
+         shooting_type, 
+         age_shooter1, 
+         age_shooter2, 
+         gender_shooter1, 
+         gender_shooter2, 
+         race_ethnicity_shooter1, 
+         race_ethnicity_shooter2, 
+         shooter_relationship1, 
+         shooter_relationship2, 
+         resource_officer, 
+         weapon, 
+         staffing, 
+         white_percent, 
+         black_percent, 
+         hispanic_percent, 
+         asian_percent, 
+         lunch_percent)
 ```
 
+### Full Model
 
+We first create a full model, which includes all potential variables. The ```step()``` function automates the backwards selection process for us.
+
+<center>
+
+```casualties ~ 
+              enrollment +
+              factor(shooting_type) +
+              staffing + 
+              white_percent + 
+              black_percent +
+              hispanic_percent +
+              asian_percent +
+              lunch_percent +
+              factor(resource_officer) +
+              factor(day_of_week)```
+              
+</center>
+
+```{r back-sel, results='hide', echo=FALSE}
+mod_cas <- lm(casualties ~ 
+              enrollment +
+              factor(shooting_type) +
+              staffing + 
+              white_percent + 
+              black_percent +
+              hispanic_percent +
+              asian_percent +
+              lunch_percent +
+              factor(resource_officer) +
+              factor(day_of_week),
+              data = school_shootings)
+
+#glance(mod_cas)$adj.r.squared
+
+perf_model <- step(mod_cas, direction = "backward")
+
+perf_model %>%
+  tidy() %>%
+  select(term, estimate)
+
+glance(perf_model)$adj.r.squared
+```
+
+The perfect model is shown below:
+
+```casualties ~ enrollment + factor(shooting_type) + staffing + 
+    lunch_percent + factor(resource_officer)```
+
+Its adjusted r-squared value is 0.1699588.
+
+### Conclusion
+
+Our analysis found that the best model included the variables ```enrollment``, ```shooting_type```, ```staffing```, ```lunch_percent``` and ```resource_officer```. 
 
 ## Section 3. Discussion and Conclusion
 
-Through this exploratory analysis, we identified some factors that correlate to a higher number of casualties for school shootings: the number of full time teachers at time of shooting (```staffing```), enrollment at school at time of shooting (```enrollment```), number of students eligible for free or reduced price lunch (```lunch```), and presence of resource officer or security guard at time of shooting (```resource_officer```). As correlation does not imply causation, we would not go as far as to say that these were the factors that caused more victims (e.g. the absence of a resource officer may not have directly caused higher number of casualties). However, the variables included in the final model of the regression analysis seem to make sense: the more full time teachers there were at the time of shooting, the more likely it would have been possible for teachers to try and protect the students and follow emergency guidelines, the more students there were at the time of shooting, the more likely , . The ```lunch``` variable is interesting in that it shows how schools of lower socioeconomic status may be 
+Through this exploratory analysis, we identified some variables that correlate to a higher number of casualties for school shootings: the number of full time teachers at time of shooting (```staffing```), enrollment at school at time of shooting (```enrollment```), number of students eligible for free or reduced price lunch (```lunch```), type of shooting (```shooting_type```), and presence of resource officer or security guard at time of shooting (```resource_officer```). As correlation does not imply causation, we would not go as far as to say that these were the factors that caused more victims (e.g. the absence of a resource officer may not have directly caused higher number of casualties). Also, with an adjusted r-squared value of 0.169, only about 17% of variability in number of casualties can be explained by these 5 variables. 
+
+Some possible explanations as to why the 5 variables were best predictors of number of casualties is as follows: the more full time teachers there were at the time of shooting, the more possible it would have been for teachers to collectively protect the students and follow emergency guidelines; more students being enrolled on school would lead to more potential victims; and indiscriminate shooting would have lead to more casualties than targeted shooting. The resource officer being present being correlated to more number of casualties is interesting and difficult to explain. Perhaps the officer being present may have somehow either triggered the students to commit more shootings out of fear, maybe the fact that the school had an officer was indicative of the school experiencing trouble with violence, or as indicated in the literature (Addington, 2009), having security measures in school may have lead to the school feeling like prison for the students, causing more emotional distress and resentment. The ```lunch``` variable is also interesting in that it shows how schools with a greater proportion of students receiving free lunch have fewer number of casualties during shootings. Although it is hard to explain why this is the case from the given data, one possibility is that these schools had better preventive measures established prior to the shooting occurrence.
+
+A few limitations exist in this analysis. There were several variables and data that would have been interesting to look at to provide a fuller understanding of our analysis such as "rate of reported bullying", as the literature suggests bullying as one of the main causes of school shootings. Although the ```lunch``` variable is indicative of the SES status of the students in the school, an "average/median family income" would have helped better explain the significance of this variable. Finally, because we didn't have any data for schools that don't have shootings, we were not able to analyze and assess how schools that experienced shootings were different from those that did not. More information on what type of preventive measures were in schools prior to the shooting would have also been interesting to see how effective these measures are (for our current data, we only have the variable ```resource_officer``` for this). If we were able to start over with the project, we would have addressed the aforementioned issues with the data. In terms of statistical analysis, although we looked at the number of casualties in a numerical perspective, we could have looked at it in a categorical way by comparing schools that had shootings with no casualties to schools that had shootings with one or more casualties. 
+
 
 
 Your write up must also include a one to two page conclusion and discussion. This will require a summary of what you have learned about your research question along with statistical arguments supporting your conclusions. Also critique your own methods and provide suggestions for improving your analysis. Issues pertaining to the reliability and validity of your data and appropriateness of the statistical analysis should also be discussed here. A paragraph on what you would do differently if you were able to start over with the project or what you would do next if you were going to continue work on the project should also be included.
-
-
-
-uid, nces_school_id, school_name, nces_district_id, district_name, date, school_year, year, time, day_of_week, city, state, school_type, enrollment, killed, injured, casualties, shooting_type, age_shooter1, gender_shooter1, race_ethnicity_shooter1, shooter_relationship1, shooter_deceased1, deceased_notes1, age_shooter2, gender_shooter2, race_ethnicity_shooter2, shooter_relationship2, shooter_deceased2, deceased_notes2, white, black, Hispanic, Asian, American_indian_alaska_native, Hawaiian_native_pacific_islander, two_or_more, resource_officer, weapon, weapon_source, lat, long, staffing, low_grade, high_grade, lunch, county, state_fips, county_fips, ulocale
 
 

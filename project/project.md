@@ -66,80 +66,21 @@ lunch, county, state\_fips, county\_fips, ulocale
 More information on the description of these variables can be found
 under the codebook in the `data` folder.
 
-## Section 2. Data Analysis
+### Mutation of Variables
 
-95% current student of the school, 81% single attackers and that 76% of
-attackers used one weapon with 61% (of all attackers) using handguns. As
-researchers claim that most firearms in school shootings were acquired
-from a family member (Vossekuil et al., 2002; Levin & Madfis, 2009),
-this analysis will also explore whether this finding apply to the data
-we have.
+We begin by manipulating some of our variables in order to make them
+more useful. For example, many of our variables are raw and thus,
+converting them to percentages will be more useful and standardized.
 
-### Claims made by Previous Literature
+We create the following variables:
 
-##### Vossekuil’s Analysis of 37 School Shootings
+<center>
 
-    ## # A tibble: 3 x 4
-    ##   gender_shooter1 gender_shooter2     n percentage
-    ##   <chr>           <chr>           <int>      <dbl>
-    ## 1 f               <NA>               10       4.50
-    ## 2 m               m                   5       2.25
-    ## 3 m               <NA>              207      93.2
+`white_percent` `black_percent` `hispanic_percent` `asian_percent`
 
-    ## # A tibble: 32 x 3
-    ##    shooter_relationship1                    n percentage
-    ##    <chr>                                <int>      <dbl>
-    ##  1 boyfriend of student                     1      0.532
-    ##  2 brother of student                       1      0.532
-    ##  3 dating mother of student                 1      0.532
-    ##  4 ex-boyfriend of student                  1      0.532
-    ##  5 father of football player                1      0.532
-    ##  6 father of student                        1      0.532
-    ##  7 fired teacher                            1      0.532
-    ##  8 former boyfriend of student              1      0.532
-    ##  9 former boyfriend of student's mother     1      0.532
-    ## 10 former student                           7      3.72 
-    ## # … with 22 more rows
+``` lunch_percent```
 
-    ## # A tibble: 4 x 3
-    ##   weapon       n percentage
-    ##   <chr>    <int>      <dbl>
-    ## 1 handgun    138      71.5 
-    ## 2 revolver    23      11.9 
-    ## 3 rifle       19       9.84
-    ## 4 shotgun     13       6.74
-
-Of the 222 shootings where the shooter’s gender is identified, we find
-that unlike Vossekuil’s findings, 4.5% of the 238 shootings were
-committed by female shooters. Still, 93.24% of the overall shootings
-were commited by single male shooters, and 2.25% of the shootings were
-committed by two male shooters. With a greater sample size, it seems
-like we see an increased proportion of single attackers and a few
-observations of female
-shooters.
-
-### Are most firearms in school shootings acquired from a family member? (Vossekuil et al., 2002; Levin & Madfis, 2009)
-
-    ## # A tibble: 2 x 2
-    ##   source_weapons     n
-    ##   <chr>          <int>
-    ## 1 family            50
-    ## 2 <NA>             188
-
-    ## # A tibble: 43 x 2
-    ##    weapon_source                                                      n
-    ##    <chr>                                                          <int>
-    ##  1 acquaintence of shooter                                            1
-    ##  2 brother                                                            1
-    ##  3 classmate, who took from parents                                   1
-    ##  4 contructed from parts legally purchased by shooter                 1
-    ##  5 department issued                                                  9
-    ##  6 family home                                                        1
-    ##  7 family member                                                      2
-    ##  8 father                                                            17
-    ##  9 father's gun, kept by 17 year old who shared room with shooter     1
-    ## 10 friend's home                                                      2
-    ## # … with 33 more rows
+</center>
 
 ### Frequency of Annual School Shootings
 
@@ -155,105 +96,164 @@ shooters.
 
 ### Popular Types of Shootings
 
-    ## # A tibble: 10 x 2
-    ## # Groups:   shooting_type [10]
-    ##    shooting_type                   n
-    ##    <chr>                       <int>
-    ##  1 targeted                      140
-    ##  2 indiscriminate                 45
-    ##  3 accidental                     28
-    ##  4 unclear                         9
-    ##  5 targeted and indiscriminate     6
-    ##  6 public suicide                  4
-    ##  7 accidental or targeted          2
-    ##  8 hostage suicide                 2
-    ##  9 public suicide (attempted)      1
-    ## 10 <NA>                            1
+```
 
+## \# A tibble: 10 x 2
+
+## \# Groups: shooting\_type \[10\]
+
+## shooting\_type n
+
+## <chr> <int>
+
+## 1 targeted 140
+
+## 2 indiscriminate 45
+
+## 3 accidental 28
+
+## 4 unclear 9
+
+## 5 targeted and indiscriminate 6
+
+## 6 public suicide 4
+
+## 7 accidental or targeted 2
+
+## 8 hostage suicide 2
+
+## 9 public suicide (attempted) 1
+
+## 10 <NA> 1
+
+``` 
 Most of the shootings in our dataset were categorized as targeted.
 
 ### Popular Days
 
-    ## # A tibble: 5 x 2
-    ## # Groups:   day_of_week [5]
-    ##   day_of_week     n
-    ##   <chr>       <int>
-    ## 1 Tuesday        55
-    ## 2 Wednesday      53
-    ## 3 Monday         48
-    ## 4 Friday         45
-    ## 5 Thursday       37
+```
+
+## \# A tibble: 5 x 2
+
+## \# Groups: day\_of\_week \[5\]
+
+## day\_of\_week n
+
+## <chr> <int>
+
+## 1 Tuesday 55
+
+## 2 Wednesday 53
+
+## 3 Monday 48
+
+## 4 Friday 45
+
+## 5 Thursday 37
+
+\`\`\`
 
 There seems to be minimal difference in the number of shootings among
 days of the week, but Tuesday and Wednesday are the days with the most
 school shootings taking place.
 
-### Mutation of Variables
-
-We wanted to manipulate some of our variables in order to make them more
-useful. For example, many of our variables are raw and thus, converting
-them to percentages will be more useful and standardized.
-
 ### Multivariate Regression Analysis
 
-These are the variables that we will include in our model. We will then
-use model selection in order to find the most appropriate model to
-perform predictions.
+These are the variables that we will include in our model:
 
-Variables:
+<center>
 
-`day_of_week` `black_percent` `white_percent` `hispanic_percent`
-`asian_percent` `enrollment` `lunch_percent`
+`enrollment` `factor(shooting_type)` `staffing` `white_percent`
+`black_percent` `hispanic_percent` `asian_percent` `lunch_percent`
+`factor(resource_officer)` `factor(day_of_week)`
 
-``` shooting_type```
+</center>
 
-```
+### Model Creation and Backwards Selection
 
-## 
+First, we eliminate variables that will not be useful in our model, such
+as those used for logistical purposes.
 
-## Call:
+### Full Model
 
-## lm(formula = casualties ~ day\_of\_week + black\_percent + white\_percent,
+We first create a full model, which includes all potential variables.
+The `step()` function automates the backwards selection process for us.
 
-## data = school\_shootings)
+<center>
 
-## 
+`casualties ~ enrollment + factor(shooting_type) + staffing +
+white_percent + black_percent + hispanic_percent + asian_percent +
+lunch_percent + factor(resource_officer) + factor(day_of_week)`
 
-## Coefficients:
+</center>
 
-## (Intercept) day\_of\_weekMonday day\_of\_weekThursday
+The perfect model is shown below:
 
-## 1.5614 -0.1165 -0.7555
+`casualties ~ enrollment + factor(shooting_type) + staffing +
+lunch_percent + factor(resource_officer)`
 
-## day\_of\_weekTuesday day\_of\_weekWednesday black\_percent
+Its adjusted r-squared value is 0.1699588.
 
-## 0.4715 -0.2698 -0.8502
+### Conclusion
 
-## white\_percent
-
-## 1.7832
-
-\`\`\`
+Our analysis found that the best model included the variables
+`enrollment``,`shooting\_type`,`staffing`,`lunch\_percent`and`resource\_officer\`\`\`.
 
 ## Section 3. Discussion and Conclusion
 
-Through this exploratory analysis, we identified some factors that
+Through this exploratory analysis, we identified some variables that
 correlate to a higher number of casualties for school shootings: the
 number of full time teachers at time of shooting (`staffing`),
 enrollment at school at time of shooting (`enrollment`), number of
-students eligible for free or reduced price lunch (`lunch`), and
-presence of resource officer or security guard at time of shooting
-(`resource_officer`). As correlation does not imply causation, we would
-not go as far as to say that these were the factors that caused more
-victims (e.g. the absence of a resource officer may not have directly
-caused higher number of casualties). However, the variables included in
-the final model of the regression analysis seem to make sense: the more
-full time teachers there were at the time of shooting, the more likely
-it would have been possible for teachers to try and protect the students
-and follow emergency guidelines, the more students there were at the
-time of shooting, the more likely , . The `lunch` variable is
-interesting in that it shows how schools of lower socioeconomic status
-may be
+students eligible for free or reduced price lunch (`lunch`), type of
+shooting (`shooting_type`), and presence of resource officer or security
+guard at time of shooting (`resource_officer`). As correlation does not
+imply causation, we would not go as far as to say that these were the
+factors that caused more victims (e.g. the absence of a resource officer
+may not have directly caused higher number of casualties). Also, with an
+adjusted r-squared value of 0.169, only about 17% of variability in
+number of casualties can be explained by these 5 variables.
+
+Some possible explanations as to why the 5 variables were best
+predictors of number of casualties is as follows: the more full time
+teachers there were at the time of shooting, the more possible it would
+have been for teachers to collectively protect the students and follow
+emergency guidelines; more students being enrolled on school would lead
+to more potential victims; and indiscriminate shooting would have lead
+to more casualties than targeted shooting. The resource officer being
+present being correlated to more number of casualties is interesting and
+difficult to explain. Perhaps the officer being present may have somehow
+either triggered the students to commit more shootings out of fear,
+maybe the fact that the school had an officer was indicative of the
+school experiencing trouble with violence, or as indicated in the
+literature (Addington, 2009), having security measures in school may
+have lead to the school feeling like prison for the students, causing
+more emotional distress and resentment. The `lunch` variable is also
+interesting in that it shows how schools with a greater proportion of
+students receiving free lunch have fewer number of casualties during
+shootings. Although it is hard to explain why this is the case from the
+given data, one possibility is that these schools had better preventive
+measures established prior to the shooting occurrence.
+
+A few limitations exist in this analysis. There were several variables
+and data that would have been interesting to look at to provide a fuller
+understanding of our analysis such as “rate of reported bullying”, as
+the literature suggests bullying as one of the main causes of school
+shootings. Although the `lunch` variable is indicative of the SES status
+of the students in the school, an “average/median family income” would
+have helped better explain the significance of this variable. Finally,
+because we didn’t have any data for schools that don’t have shootings,
+we were not able to analyze and assess how schools that experienced
+shootings were different from those that did not. More information on
+what type of preventive measures were in schools prior to the shooting
+would have also been interesting to see how effective these measures are
+(for our current data, we only have the variable `resource_officer` for
+this). If we were able to start over with the project, we would have
+addressed the aforementioned issues with the data. In terms of
+statistical analysis, although we looked at the number of casualties in
+a numerical perspective, we could have looked at it in a categorical way
+by comparing schools that had shootings with no casualties to schools
+that had shootings with one or more casualties.
 
 Your write up must also include a one to two page conclusion and
 discussion. This will require a summary of what you have learned about
@@ -265,15 +265,3 @@ should also be discussed here. A paragraph on what you would do
 differently if you were able to start over with the project or what you
 would do next if you were going to continue work on the project should
 also be included.
-
-uid, nces\_school\_id, school\_name, nces\_district\_id, district\_name,
-date, school\_year, year, time, day\_of\_week, city, state,
-school\_type, enrollment, killed, injured, casualties, shooting\_type,
-age\_shooter1, gender\_shooter1, race\_ethnicity\_shooter1,
-shooter\_relationship1, shooter\_deceased1, deceased\_notes1,
-age\_shooter2, gender\_shooter2, race\_ethnicity\_shooter2,
-shooter\_relationship2, shooter\_deceased2, deceased\_notes2, white,
-black, Hispanic, Asian, American\_indian\_alaska\_native,
-Hawaiian\_native\_pacific\_islander, two\_or\_more, resource\_officer,
-weapon, weapon\_source, lat, long, staffing, low\_grade, high\_grade,
-lunch, county, state\_fips, county\_fips, ulocale
