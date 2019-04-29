@@ -347,17 +347,24 @@ We first create a full model, which includes all potential variables. The ```ste
 
 ```{r back-sel, results='hide'}
 mod_cas <- lm(casualties ~ 
-              enrollment +
-              factor(shooting_type) +
-              staffing + 
-              white_percent + 
-              black_percent +
-              hispanic_percent +
-              asian_percent +
-              lunch_percent +
-              factor(resource_officer) +
-              factor(day_of_week),
-              data = shootings_var_rm)
+                enrollment +
+                factor(shooting_type) +
+                staffing +
+                white_percent +
+                black_percent +
+                hispanic_percent +
+                asian_percent +
+                lunch_percent +
+                factor(resource_officer) + 
+                factor(day_of_week) +
+                #factor(school_type) +
+                #age_shooter1 +
+                #factor(gender_shooter1)
+                #factor(shooter_deceased1),
+                american_indian_alaska_native_percent,
+                #factor(locale_type),
+              data = school_shootings)
+
 
 
 #glance(mod_cas)$adj.r.squared
