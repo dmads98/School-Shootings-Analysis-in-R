@@ -27,6 +27,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ```{r load-packages, message=FALSE}
 library(tidyverse)
+library(broom)
 
 ```
 
@@ -34,9 +35,38 @@ library(tidyverse)
 school_shootings <- read_csv("../data/school-shootings-data.csv")
 ```
 
+### Mutation of Variables
+
+We begin by manipulating some of our variables in order to make them more useful. For example, many of our variables are raw and thus, converting them to percentages will be more useful and standardized. 
+
+```{r mutation-races, echo=FALSE}
+school_shootings <- school_shootings %>%
+  mutate(white_percent = white/enrollment,
+         black_percent = black/enrollment,
+         hispanic_percent = hispanic/enrollment,
+         asian_percent = asian/enrollment)
+```
+
+```{r lunch-percent, echo=FALSE}
+school_shootings <- school_shootings %>%
+  mutate(lunch_percent = lunch/enrollment)
+```
+
+We create the following variables:
+
+<center>
+
+```white_percent```
+```black_percent```
+```hispanic_percent```
+```asian_percent```
+```lunch_percent```
+
+</center>
+
 ### Frequency of Annual School Shootings
 
-```{r quan-shootings, fig.width=5}
+```{r quan-shootings, fig.width=5, echo=FALSE}
 school_shootings %>%
   group_by(year) %>%
   count() %>%
@@ -50,7 +80,7 @@ school_shootings %>%
 
 ### Number of Casualties Across the Years
 
-```{r freq-casualties, fig.width=6}
+```{r freq-casualties, fig.width=6, echo=FALSE}
 school_shootings %>%
   ggplot(mapping = aes(x = year, y = casualties)) +
   geom_point() +
@@ -61,7 +91,7 @@ school_shootings %>%
 
 ### Distribution of Casualties
 
-```{r dist-casualties, fig.width=5}
+```{r dist-casualties, fig.width=5, echo=FALSE}
 school_shootings %>%
   ggplot(mapping = aes(x = casualties)) +
   geom_bar() +
@@ -72,7 +102,7 @@ school_shootings %>%
 
 ### Popular Types of Shootings
 
-```{r}
+```{r pop-shoot-type, echo=FALSE}
 school_shootings %>%
   group_by(shooting_type) %>%
   count() %>%
@@ -81,50 +111,128 @@ school_shootings %>%
 Most of the shootings in our dataset were categorized as targeted.
 
 ### Popular Days
-```{r}
+
+```{r pop-days, echo=FALSE}
 school_shootings %>%
   group_by(day_of_week) %>%
   count() %>%
   arrange(desc(n))
 ```
+
 There seems to be minimal difference in the number of shootings among days of the week, but Tuesday and Wednesday are the days with the most school shootings taking place. 
-
-### Mutation of Variables
-
-We wanted to manipulate some of our variables in order to make them more useful. For example, many of our variables are raw and thus, converting them to percentages will be more useful and standardized. 
-
-```{r mutation-races}
-school_shootings <- school_shootings %>%
-  mutate(white_percent = white/enrollment,
-         black_percent = black/enrollment,
-         hispanic_percent = hispanic/enrollment,
-         asian_percent = asian/enrollment)
-```
-
-```{r lunch-percent}
-school_shootings <- school_shootings %>%
-  mutate(lunch_percent = lunch/enrollment)
-```
 
 ### Multivariate Regression Analysis
 
-These are the variables that we will include in our model. We will then use model selection in order to find the most appropriate model to perform predictions. 
+These are the variables that we will include in our model:
 
-Variables:
+<center>
 
-```day_of_week```
-```black_percent```
+```enrollment``` 
+```factor(shooting_type)```
+```staffing```
 ```white_percent```
+```black_percent```
 ```hispanic_percent```
 ```asian_percent```
-```enrollment```
 ```lunch_percent```
-```shooting_type```
+```factor(resource_officer)```
+```factor(day_of_week)```
 
-```{r}
-mod_cas <- lm(casualties ~ day_of_week + black_percent + white_percent, data = school_shootings)
+</center>
 
-mod_cas
+### Model Creation and Backwards Selection
+
+First, we eliminate variables that will not be useful in our model, such as those used for logistical purposes. 
+
+```{r sel-vars, echo=FALSE}
+school_shootings <- school_shootings %>%
+  select(school_name, 
+         district_name, 
+         date, 
+         school_year, 
+         year, 
+         time, 
+         day_of_week, 
+         city, 
+         state, 
+         school_type, 
+         enrollment, 
+         killed, 
+         injured, 
+         casualties, 
+         shooting_type, 
+         age_shooter1, 
+         age_shooter2, 
+         gender_shooter1, 
+         gender_shooter2, 
+         race_ethnicity_shooter1, 
+         race_ethnicity_shooter2, 
+         shooter_relationship1, 
+         shooter_relationship2, 
+         resource_officer, 
+         weapon, 
+         staffing, 
+         white_percent, 
+         black_percent, 
+         hispanic_percent, 
+         asian_percent, 
+         lunch_percent)
 ```
 
+### Full Model
 
+We first create a full model, which includes all potential variables. The ```step()``` function automates the backwards selection process for us.
+
+<center>
+
+```casualties ~ 
+              enrollment +
+              factor(shooting_type) +
+              staffing + 
+              white_percent + 
+              black_percent +
+              hispanic_percent +
+              asian_percent +
+              lunch_percent +
+              factor(resource_officer) +
+              factor(day_of_week)```
+              
+</center>
+
+```{r back-sel, results='hide', echo=FALSE}
+mod_cas <- lm(casualties ~ 
+              enrollment +
+              factor(shooting_type) +
+              staffing + 
+              white_percent + 
+              black_percent +
+              hispanic_percent +
+              asian_percent +
+              lunch_percent +
+              factor(resource_officer) +
+              factor(day_of_week),
+              data = school_shootings)
+
+#glance(mod_cas)$adj.r.squared
+
+perf_model <- step(mod_cas, direction = "backward")
+
+perf_model %>%
+  tidy() %>%
+  select(term, estimate)
+
+glance(perf_model)$adj.r.squared
+```
+
+The perfect model is shown below:
+
+```casualties ~ enrollment + factor(shooting_type) + staffing + 
+    lunch_percent + factor(resource_officer)```
+
+Its adjusted r-squared value is 0.1699588.
+
+### Testing of Model
+
+### Conclusion
+
+Our analysis found that the best model included the variables ```enrollment``, ```shooting_type```, ```staffing```, ```lunch_percent``` and ```resource_officer```. 
