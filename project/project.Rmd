@@ -18,13 +18,13 @@ uid, nces_school_id, school_name, nces_district_id, district_name, date, school_
 
 More information on the description of these variables can be found under the codebook in the ```data``` folder. 
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, echo = FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
 ## Section 2. Data Analysis
 
-```{r load-packages, message=FALSE}
+```{r load-packages, message=FALSE, echo = FALSE}
 library(tidyverse)
 library(broom)
 library(infer)
@@ -32,7 +32,7 @@ library(shiny)
 library(tools)
 ```
 
-```{r load-data, message=FALSE}
+```{r load-data, message=FALSE, echo = FALSE}
 school_shootings <- read_csv("../data/school-shootings-data.csv")
 ```
 
@@ -63,7 +63,7 @@ Unlike the analysis presented in the study of Vossekuil et al. (2002) that indic
 
 ##### Weapons from Family Members?
 
-```{r weapon-resource}
+```{r weapon-resource, echo = FALSE}
 literature %>%
   filter(is.na(weapon_source)) %>%
   nrow()
@@ -121,7 +121,7 @@ Of 238 observations, 148 observations do not have the source of weapon included 
 
 We begin by manipulating some of our variables in order to make them more useful. For example, many of our variables are raw and thus, converting them to percentages will be more useful and standardized. 
 
-```{r mutation-races}
+```{r mutation-races, echo = FALSE}
 school_shootings <- school_shootings %>%
   mutate(white_percent = white/enrollment,
          black_percent = black/enrollment,
@@ -130,12 +130,12 @@ school_shootings <- school_shootings %>%
          american_indian_alaska_native_percent = american_indian_alaska_native/enrollment)
 ```
 
-```{r lunch-percent}
+```{r lunch-percent, echo = FALSE}
 school_shootings <- school_shootings %>%
   mutate(lunch_percent = lunch/enrollment)
 ```
 
-```{r ulocale-factoring}
+```{r ulocale-factoring, echo = FALSE}
 school_shootings <- school_shootings %>%
   mutate(locale_type = case_when(
     ulocale == 11 ~ "City",
@@ -153,7 +153,7 @@ school_shootings <- school_shootings %>%
   ))
 ```
 
-```{r school-type, warning=FALSE}
+```{r school-type, warning=FALSE, echo = FALSE}
 school_shootings <- school_shootings %>%
   mutate(high_grade = case_when(high_grade == "PK" ~ 0,
 TRUE ~ as.numeric(high_grade)),
@@ -171,7 +171,7 @@ school_shootings <- school_shootings %>%
 ))
 ```
 
-```{r resource-officer}
+```{r resource-officer, echo = FALSE}
 school_shootings <- school_shootings %>%
     mutate(resource_officer = case_when(
         resource_officer == 1 ~ "Yes",
@@ -223,7 +223,7 @@ school_shootings %>%
 
 Here is a visualization of school shootings per state in the U.S.
 
-```{r testing, message=FALSE, warning=FALSE}
+```{r testing, message=FALSE, warning=FALSE, echo = FALSE}
 library(mapdata)
 library(maps)
 library(reshape2)
@@ -267,11 +267,11 @@ ggplot(school_shootings_state, aes(map_id = state)) + geom_map(aes(fill = Shooti
 
 ### Estimation via Bootstrapping
 
-```{r set-seed}
+```{r set-seed, echo = FALSE}
 set.seed(042918)
 ```
 
-```{r bootstrap}
+```{r bootstrap, echo = FALSE}
 boot_dist <- school_shootings %>%
   # specify the variable of interest
   specify(response = casualties) %>%
@@ -406,7 +406,7 @@ shinyApp(ui = ui, server = server)
 
 Next, we eliminate variables that will not be useful in our model, such as those used for logistical purposes. 
 
-```{r sel-vars}
+```{r sel-vars, echo = FALSE}
 shootings_var_rm <- school_shootings %>%
   select(school_name,
          date, 
@@ -470,7 +470,7 @@ We first create a full model, which includes all potential variables. The ```ste
 
 ### Backwards Selection
 
-```{r back-sel, results='hide'}
+```{r back-sel, results='hide', echo = FALSE}
 mod_cas <- lm(casualties ~ 
                 enrollment +
                 factor(shooting_type) +
@@ -494,7 +494,7 @@ mod_cas <- lm(casualties ~
 perf_model <- step(mod_cas, direction = "backward")
 ```
 
-```{r model-coefficients}
+```{r model-coefficients, echo = FALSE}
 perf_model %>%
   tidy() %>%
   select(term, estimate)
