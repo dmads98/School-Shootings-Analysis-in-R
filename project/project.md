@@ -87,6 +87,13 @@ We create the following variables:
 
 ![](project_files/figure-gfm/dist-casualties-1.png)<!-- -->
 
+### School with most casualties
+
+The two schools with the most casualties (34) are Columbine High School
+and Marjory Stoneman Douglas High School. The shooting at Columbine High
+School took place in 1999 and the one at Douglas HS took place 19 years
+later in 2018.
+
 ### Multivariate Regression Analysis
 
 These are the variables that we will include in our model:
