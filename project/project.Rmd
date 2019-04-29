@@ -9,7 +9,7 @@ output: github_document
 
 Gun control has been an issue of huge debate in the United States: from individuals claiming that the possession of guns is necessary to protect one’s own safety to others who claim that it’s a “right” bestowed by the constitution, gun control seems to imply different things to different people. With a huge market of gun sales being run by capitalism, it doesn’t seem like any number of casualties caused by gun violence will be sufficient to make up for the monetary loss a ban on guns would have on our capitalist market — which is to some extent why we still have gun control issues going on in the United States. Such issue of gun violence has unfortunately been spilling into our schools, and school shootings have become the issue of concern for teachers, school districts, and families in hopes of never having to face such an incident. The lack of control and support the government and community provided towards this issue has unfortunately lead to schools carrying the burden of coming up with preventative measures to ensure their students’ safety — a high school in South Florida, for example, has brought up and implemented the idea of a bullet-proof shelter to protect children from harm, and another school in Texas asked the students to wear a clear backpack to school. Despite such efforts, school shootings still break out, leading researchers and school officials to increasingly work more to figure out the best ways to prevent school shootings from occurring.
 
-The primary focus of the current project is to look into the data of school shootings from the past to evaluate what factors correlate to higher number of casualties in school shootings, in hopes that this analysis will help lead to identification of good preventive measures. In addition, we will also be looking at whether our data is in line with a study (Vossekuil et al., 2002) that analyzed 37 school shooting which identified attackers as all male, 95% current student of the school, 81% single attackers and that 76% of attackers used one weapon with 61% (of all attackers) using handguns. As researchers claim that most firearms in school shootings were acquired from a family member (Vossekuil et al., 2002; Levin & Madfis, 2009), this analysis will also explore whether such findings apply to the data we have. 
+The primary focus of the current project is to look into the data of school shootings from the past to evaluate what factors correlate to higher number of casualties in school shootings, in hopes that this analysis will help lead to identification of good preventive measures. In addition, we will also be looking at whether our data is in line with a study (Vossekuil et al., 2002) that analyzed 37 school shooting which identified attackers as all male, 95% current student of the school, 81% single attackers. As researchers claim that most firearms in school shootings were acquired from a family member (Vossekuil et al., 2002; Levin & Madfis, 2009), this analysis will also explore whether such findings apply to the data we have. 
 
 Throughout this project, our team will look into the ```schools-shootings-data.csv``` as provided by the Washington Post. The data consists of any act of gunfire at schools (primary, secondary) that occurred during school hours, or immediately before or after hours, since the Columbine High massacre on April 20, 1999. As such, 238 incidences of school shootings have been included in the dataset. The data was collected by using “Nexis, news articles, open-source databases, law enforcement reports, information from school websites, and calls to schools and police departments”, as according to Washington Post. The variables included in this data are as follows: 
 
@@ -24,7 +24,6 @@ knitr::opts_chunk$set(echo = FALSE)
 ```{r load-packages, message=FALSE}
 library(tidyverse)
 library(broom)
-
 ```
 
 ```{r load-data, message=FALSE}
@@ -32,9 +31,9 @@ school_shootings <- read_csv("../data/school-shootings-data.csv")
 view(school_shootings)
 ```
 
-In addition, we will also be looking at whether our data is in line with a study (Vossekuil et al., 2002) that analyzed 37 school shooting which identified attackers as all male, 95% current student of the school, 81% single attackers and that 76% of attackers used one weapon with 61% (of all attackers) using handguns. As researchers claim that most firearms in school shootings were acquired from a family member (Vossekuil et al., 2002; Levin & Madfis, 2009), this analysis will also explore whether such findings apply to the data we have. 
-
 ### In Line with Previous Literature?
+
+##### Vossekuil's Study
 
 ```{r vossekuil, echo= FALSE}
 literature <- school_shootings %>%
@@ -50,11 +49,68 @@ literature %>%
   mutate(percentage = n/sum(n) * 100)
 
 literature %>%
-  count(shooter_relationship1)
+  filter(shooter_relationship1 != "NA") %>%
+  count(shooter_relationship1) %>%
+  mutate(percentage = n/sum(n) * 100)
+```
+
+Unlike the analysis presented in the study of Vossekuil et al. (2002) that indicated all attackers as male, our data shows that 4.5% of the first shooter were female, although there were no second shooters that were female. Out of 222 observations where enough information was given about the shooters, only 5 shootings had 2 shooters involved--which is only 2.25%, leaving 97.75% of the attacks as being committed by single attackers. This is a much bigger number compared to the 81% Vossekuil et al. reported in their study. Also, although Vossekuil reported that 95% of the attackers in their study were current students, in this data 125 out of 188 (66.5%) shootings were committed by current students, which is a smaller proprotion than that observed by Vossekuil.
+
+##### Weapons from Family Members?
+
+```{r weapon-resource}
+literature %>%
+  filter(is.na(weapon_source)) %>%
+  nrow()
+
+literature %>%
+  filter(weapon_source != "NA") %>%
+  mutate(wepsource_fam = case_when(
+    str_detect(weapon_source, "brother") ~ TRUE,
+    str_detect(weapon_source, "parents") ~ TRUE,
+    str_detect(weapon_source, "family") ~ TRUE,
+    str_detect(weapon_source, "father") ~ TRUE,
+    str_detect(weapon_source, "father's") ~ TRUE,
+    str_detect(weapon_source, "home") ~ TRUE,
+    str_detect(weapon_source, "grandparents") ~ TRUE,
+    str_detect(weapon_source, "grandfather") ~ TRUE,
+    str_detect(weapon_source, "guardian") ~ TRUE,
+    str_detect(weapon_source, "mother") ~ TRUE,
+     str_detect(weapon_source, "parent") ~ TRUE,
+     str_detect(weapon_source, "relative") ~ TRUE,
+     str_detect(weapon_source, "relatives") ~ TRUE,
+     str_detect(weapon_source, "stepfather") ~ TRUE,
+     str_detect(weapon_source, "uncle") ~ TRUE
+  )) %>%
+  count(wepsource_fam) %>%
+  mutate(percentage = n/sum(n) * 100)
+
+literature %>%
+  filter(shooter_relationship1 == "student") %>%
+  filter(weapon_source != "NA") %>%
+  mutate(wepsource_fam = case_when(
+    str_detect(weapon_source, "brother") ~ TRUE,
+    str_detect(weapon_source, "parents") ~ TRUE,
+    str_detect(weapon_source, "family") ~ TRUE,
+    str_detect(weapon_source, "father") ~ TRUE,
+    str_detect(weapon_source, "father's") ~ TRUE,
+    str_detect(weapon_source, "home") ~ TRUE,
+    str_detect(weapon_source, "grandparents") ~ TRUE,
+    str_detect(weapon_source, "grandfather") ~ TRUE,
+    str_detect(weapon_source, "guardian") ~ TRUE,
+    str_detect(weapon_source, "mother") ~ TRUE,
+     str_detect(weapon_source, "parent") ~ TRUE,
+     str_detect(weapon_source, "relative") ~ TRUE,
+     str_detect(weapon_source, "relatives") ~ TRUE,
+     str_detect(weapon_source, "stepfather") ~ TRUE,
+     str_detect(weapon_source, "uncle") ~ TRUE
+  )) %>%
+  count(wepsource_fam) %>%
+  mutate(percentage = n/sum(n) * 100)
 
 ```
 
-Unlike the analysis presented in the study of Vossekuil et al. (2002) that indicated all attackers as male, our data shows that 4.5% of the first shooter were female, although there were no second shooters that were female. Out of 222 observations where enough information was given about the shooters, only 5 shootings had 2 shooters involved--which is only 2.25%, leaving 97.75% of the attacks as being committed by single attackers. This is a much bigger number compared to the 81% Vossekuil et al. reported in their study. 
+Of 238 observations, 148 observations do not have the source of weapon included in the list. Of the remaining 90 observations, 50 were cases where the shooter gained access to weapons through family members (e.g. uncle, relatives, parents), which is 55.5% for the entire observations. When narrowing this down to shooters who were current students of the school, we get that 75.44% of the students get their weapons from their family members or home, which is in line with the literature that claim that most firearms in school shootings were acquired from a family member (Vossekuil et al., 2002; Levin & Madfis, 2009)
 
 ### Mutation of Variables
 

@@ -34,11 +34,10 @@ analysis will help lead to identification of good preventive measures.
 In addition, we will also be looking at whether our data is in line with
 a study (Vossekuil et al., 2002) that analyzed 37 school shooting which
 identified attackers as all male, 95% current student of the school, 81%
-single attackers and that 76% of attackers used one weapon with 61% (of
-all attackers) using handguns. As researchers claim that most firearms
-in school shootings were acquired from a family member (Vossekuil et
-al., 2002; Levin & Madfis, 2009), this analysis will also explore
-whether such findings apply to the data we have.
+single attackers. As researchers claim that most firearms in school
+shootings were acquired from a family member (Vossekuil et al., 2002;
+Levin & Madfis, 2009), this analysis will also explore whether such
+findings apply to the data we have.
 
 Throughout this project, our team will look into the
 `schools-shootings-data.csv` as provided by the Washington Post. The
@@ -66,16 +65,9 @@ lunch, county, state\_fips, county\_fips, ulocale
 More information on the description of these variables can be found
 under the codebook in the `data` folder.
 
-In addition, we will also be looking at whether our data is in line with
-a study (Vossekuil et al., 2002) that analyzed 37 school shooting which
-identified attackers as all male, 95% current student of the school, 81%
-single attackers and that 76% of attackers used one weapon with 61% (of
-all attackers) using handguns. As researchers claim that most firearms
-in school shootings were acquired from a family member (Vossekuil et
-al., 2002; Levin & Madfis, 2009), this analysis will also explore
-whether such findings apply to the data we have.
-
 ### In Line with Previous Literature?
+
+##### Vossekuil’s Study
 
     ## # A tibble: 3 x 4
     ##   gender_shooter1 gender_shooter2     n percentage
@@ -84,20 +76,20 @@ whether such findings apply to the data we have.
     ## 2 m               m                   5       2.25
     ## 3 m               <NA>              207      93.2
 
-    ## # A tibble: 33 x 2
-    ##    shooter_relationship1                    n
-    ##    <chr>                                <int>
-    ##  1 boyfriend of student                     1
-    ##  2 brother of student                       1
-    ##  3 dating mother of student                 1
-    ##  4 ex-boyfriend of student                  1
-    ##  5 father of football player                1
-    ##  6 father of student                        1
-    ##  7 fired teacher                            1
-    ##  8 former boyfriend of student              1
-    ##  9 former boyfriend of student's mother     1
-    ## 10 former student                           7
-    ## # … with 23 more rows
+    ## # A tibble: 32 x 3
+    ##    shooter_relationship1                    n percentage
+    ##    <chr>                                <int>      <dbl>
+    ##  1 boyfriend of student                     1      0.532
+    ##  2 brother of student                       1      0.532
+    ##  3 dating mother of student                 1      0.532
+    ##  4 ex-boyfriend of student                  1      0.532
+    ##  5 father of football player                1      0.532
+    ##  6 father of student                        1      0.532
+    ##  7 fired teacher                            1      0.532
+    ##  8 former boyfriend of student              1      0.532
+    ##  9 former boyfriend of student's mother     1      0.532
+    ## 10 former student                           7      3.72 
+    ## # … with 22 more rows
 
 Unlike the analysis presented in the study of Vossekuil et al. (2002)
 that indicated all attackers as male, our data shows that 4.5% of the
@@ -106,7 +98,37 @@ were female. Out of 222 observations where enough information was given
 about the shooters, only 5 shootings had 2 shooters involved–which is
 only 2.25%, leaving 97.75% of the attacks as being committed by single
 attackers. This is a much bigger number compared to the 81% Vossekuil et
-al. reported in their study.
+al. reported in their study. Also, although Vossekuil reported that 95%
+of the attackers in their study were current students, in this data 125
+out of 188 (66.5%) shootings were committed by current students, which
+is a smaller proprotion than that observed by Vossekuil.
+
+##### Weapons from Family Members?
+
+    ## [1] 148
+
+    ## # A tibble: 2 x 3
+    ##   wepsource_fam     n percentage
+    ##   <lgl>         <int>      <dbl>
+    ## 1 TRUE             50       55.6
+    ## 2 NA               40       44.4
+
+    ## # A tibble: 2 x 3
+    ##   wepsource_fam     n percentage
+    ##   <lgl>         <int>      <dbl>
+    ## 1 TRUE             43       75.4
+    ## 2 NA               14       24.6
+
+Of 238 observations, 148 observations do not have the source of weapon
+included in the list. Of the remaining 90 observations, 50 were cases
+where the shooter gained access to weapons through family members
+(e.g. uncle, relatives, parents), which is 55.5% for the entire
+observations. When narrowing this down to shooters who were current
+students of the school, we get that 75.44% of the students get their
+weapons from their family members or home, which is in line with the
+literature that claim that most firearms in school shootings were
+acquired from a family member (Vossekuil et al., 2002; Levin & Madfis,
+2009)
 
 ### Mutation of Variables
 
