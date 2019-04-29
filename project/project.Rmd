@@ -30,7 +30,6 @@ library(broom)
 
 ```{r load-data, message=FALSE}
 school_shootings <- read_csv("../data/school-shootings-data.csv")
-view(school_shootings)
 ```
 
 ### In Line with Previous Literature?
@@ -117,13 +116,13 @@ Of 238 observations, 148 observations do not have the source of weapon included 
 ### Mutation of Variables
 
 We begin by manipulating some of our variables in order to make them more useful. For example, many of our variables are raw and thus, converting them to percentages will be more useful and standardized. 
-
 ```{r mutation-races}
 school_shootings <- school_shootings %>%
   mutate(white_percent = white/enrollment,
          black_percent = black/enrollment,
          hispanic_percent = hispanic/enrollment,
-         asian_percent = asian/enrollment)
+         asian_percent = asian/enrollment,
+         american_indian_alaska_native_percent = american_indian_alaska_native/enrollment)
 ```
 
 ```{r lunch-percent}
@@ -149,6 +148,24 @@ school_shootings <- school_shootings %>%
   ))
 ```
 
+```{r school-type, warning=FALSE}
+school_shootings <- school_shootings %>%
+  mutate(high_grade = case_when(high_grade == "PK" ~ 0,
+TRUE ~ as.numeric(high_grade)),
+low_grade = case_when( low_grade == "PK" ~ 0,
+low_grade == "KG" ~ 0,
+TRUE ~ as.numeric(low_grade)),
+  )
+
+school_shootings <- school_shootings %>%
+  mutate(school_type = case_when(
+  is.na(high_grade) ~ NA_character_,
+  (high_grade >= 9) ~ "highschool",
+  (high_grade >= 6) ~ "middleschool",
+  TRUE ~ "elementary"
+))
+```
+
 We create the following variables:
 
 <center>
@@ -157,6 +174,8 @@ We create the following variables:
 ```black_percent```
 ```hispanic_percent```
 ```asian_percent```
+```american_indian_alaska_native_percent```
+```school_type```
 ```lunch_percent```
 ```locale_type```
 
@@ -242,7 +261,54 @@ ggplot(school_shootings_state, aes(map_id = state)) + geom_map(aes(fill = Shooti
     coord_map("polyconic") + theme_map() + scale_fill_gradient(low = "#FFCCCC", high = "#CB454A")
 ```
 
+### Mean Casualties Estimation via Bootstrapping
+
+# ```{r bootstrap}
+# boot_dist <- school %>%
+#   # specify the variable of interest
+#   specify(response = rent) %>% 
+#   # generate 15000 bootstrap samples
+#   generate(reps = 15000, type = "bootstrap") %>% 
+#   # calculate the median of each bootstrap sample
+#   calculate(stat = "median")
+# ```
+
 ### Multivariate Regression Analysis
+
+Next, we eliminate variables that will not be useful in our model, such as those used for logistical purposes. 
+
+```{r sel-vars}
+shootings_var_rm <- school_shootings %>%
+  select(school_name,
+         date, 
+         school_year, 
+         year, 
+         time, 
+         day_of_week, 
+         city, 
+         state, 
+         school_type, 
+         enrollment, 
+         killed, 
+         injured, 
+         casualties, 
+         shooting_type, 
+         age_shooter1, 
+         gender_shooter1, 
+         race_ethnicity_shooter1, 
+         shooter_relationship1, 
+         shooter_deceased1,
+         resource_officer, 
+         weapon, 
+         staffing, 
+         white_percent, 
+         black_percent, 
+         hispanic_percent, 
+         asian_percent, 
+         lunch_percent,
+         american_indian_alaska_native_percent,
+         locale_type)
+```
 
 These are the variables that we will include in our model:
 
@@ -263,45 +329,6 @@ These are the variables that we will include in our model:
 
 ### Model Creation and Backwards Selection
 
-First, we eliminate variables that will not be useful in our model, such as those used for logistical purposes. 
-
-```{r sel-vars, echo=FALSE}
-school_shootings <- school_shootings %>%
-  select(school_name, 
-         district_name, 
-         date, 
-         school_year, 
-         year, 
-         time, 
-         day_of_week, 
-         city, 
-         state, 
-         school_type, 
-         enrollment, 
-         killed, 
-         injured, 
-         casualties, 
-         shooting_type, 
-         age_shooter1, 
-         age_shooter2, 
-         gender_shooter1, 
-         gender_shooter2, 
-         race_ethnicity_shooter1, 
-         race_ethnicity_shooter2, 
-         shooter_relationship1, 
-         shooter_relationship2, 
-         resource_officer, 
-         weapon, 
-         staffing, 
-         white_percent, 
-         black_percent, 
-         hispanic_percent, 
-         asian_percent, 
-         lunch_percent)
-```
-
-### Full Model
-
 We first create a full model, which includes all potential variables. The ```step()``` function automates the backwards selection process for us.
 
 <center>
@@ -320,7 +347,7 @@ We first create a full model, which includes all potential variables. The ```ste
               
 </center>
 
-```{r back-sel, results='hide', echo=FALSE}
+```{r back-sel, results='hide'}
 mod_cas <- lm(casualties ~ 
               enrollment +
               factor(shooting_type) +
@@ -332,7 +359,7 @@ mod_cas <- lm(casualties ~
               lunch_percent +
               factor(resource_officer) +
               factor(day_of_week),
-              data = school_shootings)
+              data = shootings_var_rm)
 
 
 #glance(mod_cas)$adj.r.squared

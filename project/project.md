@@ -143,7 +143,8 @@ We create the following variables:
 <center>
 
 `white_percent` `black_percent` `hispanic_percent` `asian_percent`
-`lunch_percent` `locale_type`
+`american_indian_alaska_native_percent` `school_type` `lunch_percent`
+`locale_type`
 
 </center>
 
@@ -161,11 +162,19 @@ We create the following variables:
 
 ### School Shootings by State
 
-Here is a visualization of school shootings per state in the U.S.
+Here is a visualization of school shootings per state in the
+U.S.
 
 ![](project_files/figure-gfm/testing-1.png)<!-- -->
 
+### Mean Casualties Estimation via Bootstrapping
+
+# `{r bootstrap} # boot_dist <- school %>% #   # specify the variable of interest #   specify(response = rent) %>%  #   # generate 15000 bootstrap samples #   generate(reps = 15000, type = "bootstrap") %>%  #   # calculate the median of each bootstrap sample #   calculate(stat = "median") #`
+
 ### Multivariate Regression Analysis
+
+Next, we eliminate variables that will not be useful in our model, such
+as those used for logistical purposes.
 
 These are the variables that we will include in our model:
 
@@ -178,11 +187,6 @@ These are the variables that we will include in our model:
 </center>
 
 ### Model Creation and Backwards Selection
-
-First, we eliminate variables that will not be useful in our model, such
-as those used for logistical purposes.
-
-### Full Model
 
 We first create a full model, which includes all potential variables.
 The `step()` function automates the backwards selection process for us.
